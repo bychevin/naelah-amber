@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naelah Amber</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">Naelah Amber</div>
+    <div class="search">
+      <input type="text" id="searchInput" placeholder="Buscar perfume...">
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Perfumes Árabes Originales</h1>
+</section>
+
+<section class="catalog">
+<div class="grid">
+
+<div class="card"><img src="{{ url_for('static', filename='img/Durrat Al Aroos.png') }}"><div class="brand">AL WATANIAH</div><div class="name">Durrat Al Aroos</div><div class="price">27/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Odyssey White Edition.png') }}"><div class="brand">ARMAF</div><div class="name">Odyssey White Edition</div><div class="price">34/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Odyssey Mandarin Sky.png') }}"><div class="brand">ARMAF</div><div class="name">Odyssey Mandarine Sky</div><div class="price">37.5/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Club de Nuit.png') }}"><div class="brand">ARMAF</div><div class="name">Club de Nuit Intense EDT</div><div class="price">44/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Afnan 9AM.png') }}"><div class="brand">AFNAN</div><div class="name">9AM Men</div><div class="price">40.6/usd</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Afnan 9PM Black.png') }}"><div class="brand">AFNAN</div><div class="name">9PM Men</div><div class="price">40.6/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Badee Amethyste.png') }}"><div class="brand">LATTAFA</div><div class="name">Badee Amethyste</div><div class="price">29/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Badee Sublime.png') }}"><div class="brand">LATTAFA</div><div class="name">Badee Sublime</div><div class="price">31.8/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Honor and Glory.png') }}"><div class="brand">LATTAFA</div><div class="name">Honor and Glory</div><div class="price">32.6/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Yara Rosa.png') }}"><div class="brand">LATTAFA</div><div class="name">Yara Rosa</div><div class="price">31.8/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Yara Elixir.png') }}"><div class="brand">LATTAFA</div><div class="name">Yara Elixir</div><div class="price">39.8/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Yara Candy.png') }}"><div class="brand">LATTAFA</div><div class="name">Yara Candy</div><div class="price">30.3/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Vintage Radio.png') }}"><div class="brand">LATTAFA</div><div class="name">Vintage Radio</div><div class="price">31.8/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Mayar Pink.png') }}"><div class="brand">LATTAFA</div><div class="name">Mayar Pink</div><div class="price">31/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Khamrah Black.png') }}"><div class="brand">LATTAFA</div><div class="name">Khamrah Black</div><div class="price">31.8/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Eclaire.png') }}"><div class="brand">LATTAFA</div><div class="name">Eclaire</div><div class="price">29.5/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Ajwad Pink to Pink.png') }}"><div class="brand">LATTAFA</div><div class="name">Ajwad Pink to Pink</div><div class="price">23.14/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Yeah Men.png') }}"><div class="brand">MAISON ALHAMBRA</div><div class="name">Yeah Men</div><div class="price">27/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Salvo Intense.png') }}"><div class="brand">MAISON ALHAMBRA</div><div class="name">Salvo Intense</div><div class="price">28.7/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/La Vivacite Intense.png') }}"><div class="brand">MAISON ALHAMBRA</div><div class="name">La Vivacite Intense</div><div class="price">25.5/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Leonie.png') }}"><div class="brand">MAISON ALHAMBRA</div><div class="name">Leonie</div><div class="price">30.2/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Jungle Vibe.png') }}"><div class="brand">RAYHAAN</div><div class="name">Jungle Vibe</div><div class="price">39.9/USD</div></div>
+
+<div class="card"><img src="{{ url_for('static', filename='img/Hawas Black.png') }}"><div class="brand">RASASI</div><div class="name">Hawas Black</div><div class="price">42.14/USD/div></div>
+
+</div>
+</section>
+
+<script>
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("input", () => {
+  const value = searchInput.value.toLowerCase().trim();
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    card.style.display = text.includes(value) ? "block" : "none";
+  });
+});
+</script>
+
+</body>
+</html>
