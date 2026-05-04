@@ -8,6 +8,7 @@ font-family:Arial,sans-serif;
 body{
 background:linear-gradient(180deg,#050505,#111);
 color:white;
+overflow-x:hidden;
 }
 
 header{
@@ -31,6 +32,7 @@ gap:20px;
 font-size:42px;
 font-weight:bold;
 color:#b9b7b0;
+white-space:nowrap;
 }
 
 .search{
@@ -54,12 +56,14 @@ justify-content:center;
 align-items:center;
 text-align:center;
 background:radial-gradient(circle,#1b1b1b,#090909);
+padding:20px;
 }
 
 .hero h1{
 font-size:65px;
 color:#b9b7b0;
-text-shadow:0 0 20px rgba(241, 241, 239, 0.521);
+text-shadow:0 0 20px rgba(241,241,239,.521);
+line-height:1.1;
 }
 
 .catalog{
@@ -106,9 +110,174 @@ letter-spacing:1px;
 font-size:28px;
 font-weight:bold;
 margin:5px 0;
+line-height:1.1;
 }
 
 .price{
 font-size:24px;
 color:#d4af37;
+}
+
+.tag{
+display:inline-block;
+font-size:11px;
+padding:5px 9px;
+border-radius:999px;
+margin-left:6px;
+font-weight:bold;
+vertical-align:middle;
+letter-spacing:.3px;
+}
+
+.masculino{
+background:#16263d;
+color:#9ecbff;
+border:1px solid rgba(158,203,255,.35);
+}
+
+.femenino{
+background:#3d162f;
+color:#ff9edb;
+border:1px solid rgba(255,158,219,.35);
+}
+
+.unisex{
+background:#2f2f2f;
+color:#d8d8d8;
+border:1px solid rgba(216,216,216,.25);
+}
+
+/* TABLET */
+@media (max-width:900px){
+.nav{
+max-width:100%;
+}
+
+.logo{
+font-size:34px;
+}
+
+.hero h1{
+font-size:48px;
+}
+
+.grid{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+/* CELULAR */
+@media (max-width:600px){
+
+header{
+padding:14px 16px;
+position:sticky;
+}
+
+.nav{
+flex-direction:column;
+align-items:stretch;
+gap:12px;
+}
+
+.logo{
+font-size:30px;
+text-align:center;
+width:100%;
+white-space:normal;
+}
+
+.search{
+width:100%;
+}
+
+.search input{
+padding:13px 18px;
+font-size:15px;
+}
+
+.hero{
+height:auto;
+min-height:180px;
+padding:35px 18px;
+}
+
+.hero h1{
+font-size:36px;
+line-height:1.15;
+max-width:360px;
+}
+
+.catalog{
+padding:28px 16px;
+}
+
+.grid{
+grid-template-columns:1fr;
+gap:24px;
+}
+
+.card{
+padding:16px;
+border-radius:18px;
+max-width:420px;
+width:100%;
+margin:0 auto;
+}
+
+.card:hover{
+transform:none;
+box-shadow:0 0 18px rgba(212,175,55,.18);
+}
+
+.card img{
+height:260px;
+border-radius:14px;
+}
+
+.brand{
+font-size:12px;
+margin-top:12px;
+}
+
+.name{
+font-size:24px;
+line-height:1.15;
+}
+
+.price{
+font-size:22px;
+margin-top:6px;
+}
+
+.tag{
+display:inline-block;
+margin-left:0;
+margin-top:8px;
+font-size:11px;
+}
+}
+
+/* CELULARES CHICOS */
+@media (max-width:380px){
+
+.logo{
+font-size:26px;
+}
+
+.hero h1{
+font-size:31px;
+}
+
+.card img{
+height:220px;
+}
+
+.name{
+font-size:21px;
+}
+
+.price{
+font-size:20px;
+}
 }
