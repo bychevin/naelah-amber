@@ -1,5 +1,4 @@
 from flask import Flask, render_template
-import os
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
@@ -7,10 +6,9 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 def home():
     return render_template("index.html")
 
-# 👇 ESTO ES LA CLAVE (sirve static en producción)
-@app.route('/static/<path:path>')
+@app.route("/static/<path:path>")
 def send_static(path):
     return app.send_static_file(path)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=10000, debug=True)
