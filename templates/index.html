@@ -8,6 +8,19 @@
 </head>
 <body>
 
+<div class="info-banner" id="infoBanner">
+  <div class="info-box">
+    <p>
+      Antes de comprar 👇<br><br>
+      Podés armar tu carrito con los productos que quieras.<br>
+      Cuando lo tengas listo, copiá el link del carrito y mandámelo por Instagram 📩<br><br>
+      Así puedo ver exactamente lo que elegiste y coordinar todo con vos.<br><br>
+      Cualquier duda, escribime sin problema 😉
+    </p>
+    <button onclick="cerrarBanner()">Entendido</button>
+  </div>
+</div>
+
 <header>
   <div class="nav">
     <div class="logo">Naelah Amber</div>
@@ -21,74 +34,380 @@
   <h1>Perfumes Árabes Originales</h1>
 </section>
 
+<section class="filters">
+  <button class="filter-btn active" onclick="filterGender('todos', this)">Todos</button>
+  <button class="filter-btn" onclick="filterGender('masculino', this)">Masculino</button>
+  <button class="filter-btn" onclick="filterGender('femenino', this)">Femenino</button>
+  <button class="filter-btn" onclick="filterGender('unisex', this)">Unisex</button>
+</section>
+
 <section class="catalog">
 <div class="grid">
 
-<div class="card"><img src="{{ url_for('static', filename='img/Durrat Al Aroos.png') }}"><div class="brand">AL WATANIAH</div><div class="name">Durrat Al Aroos <span class="tag unisex">Unisex</span></div><div class="price">27/USD</div></div>
+<div class="card" data-gender="unisex">
+<img src="{{ url_for('static', filename='img/Durrat Al Aroos.png') }}">
+<div class="brand">AL WATANIAH</div>
+<div class="name">Durrat Al Aroos <span class="tag unisex">Unisex</span></div>
+<div class="price">27/USD</div>
+<button class="add-btn" onclick="addToCart('Durrat Al Aroos',27)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Odyssey White Edition.png') }}"><div class="brand">ARMAF</div><div class="name">Odyssey White Edition <span class="tag masculino">Masculino</span></div><div class="price">34/USD</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Odyssey White Edition.png') }}">
+<div class="brand">ARMAF</div>
+<div class="name">Odyssey White Edition <span class="tag masculino">Masculino</span></div>
+<div class="price">34/USD</div>
+<button class="add-btn" onclick="addToCart('Odyssey White Edition',34)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Odyssey Mandarin Sky.png') }}"><div class="brand">ARMAF</div><div class="name">Odyssey Mandarine Sky <span class="tag masculino">Masculino</span></div><div class="price">37.5/USD</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Odyssey Mandarin Sky.png') }}">
+<div class="brand">ARMAF</div>
+<div class="name">Odyssey Mandarine Sky <span class="tag masculino">Masculino</span></div>
+<div class="price">37.5/USD</div>
+<button class="add-btn" onclick="addToCart('Odyssey Mandarine Sky',37.5)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Club de Nuit.png') }}"><div class="brand">ARMAF</div><div class="name">Club de Nuit Intense EDT <span class="tag masculino">Masculino</span></div><div class="price">44/USD</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Club de Nuit.png') }}">
+<div class="brand">ARMAF</div>
+<div class="name">Club de Nuit Intense EDT <span class="tag masculino">Masculino</span></div>
+<div class="price">44/USD</div>
+<button class="add-btn" onclick="addToCart('Club de Nuit Intense EDT',44)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Afnan 9AM.png') }}"><div class="brand">AFNAN</div><div class="name">9AM Men <span class="tag masculino">Masculino</span></div><div class="price">40.6/USD</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Afnan 9AM.png') }}">
+<div class="brand">AFNAN</div>
+<div class="name">9AM Men <span class="tag masculino">Masculino</span></div>
+<div class="price">40.6/USD</div>
+<button class="add-btn" onclick="addToCart('9AM Men',40.6)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Afnan 9PM Black.png') }}"><div class="brand">AFNAN</div><div class="name">9PM Men <span class="tag masculino">Masculino</span></div><div class="price">40.6/USD</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Afnan 9PM Black.png') }}">
+<div class="brand">AFNAN</div>
+<div class="name">9PM Men <span class="tag masculino">Masculino</span></div>
+<div class="price">40.6/USD</div>
+<button class="add-btn" onclick="addToCart('9PM Men',40.6)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Lattafa Asad.png') }}"><div class="brand">LATTAFA</div><div class="name">Lattafa Asad <span class="tag masculino">Masculino</span></div><div class="price">45/usd</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Lattafa Asad.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Lattafa Asad <span class="tag masculino">Masculino</span></div>
+<div class="price">45/USD</div>
+<button class="add-btn" onclick="addToCart('Lattafa Asad',45)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Asad Elixir.png') }}"><div class="brand">LATTAFA</div><div class="name">Asad Elixir <span class="tag masculino">Masculino</span></div><div class="price">47,5/usd</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Asad Elixir.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Asad Elixir <span class="tag masculino">Masculino</span></div>
+<div class="price">47.5/USD</div>
+<button class="add-btn" onclick="addToCart('Asad Elixir',47.5)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Badee Amethyste.png') }}"><div class="brand">LATTAFA</div><div class="name">Badee Amethyste <span class="tag femenino">Femenino</span></div><div class="price">29/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Badee Amethyste.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Badee Amethyste <span class="tag femenino">Femenino</span></div>
+<div class="price">29/USD</div>
+<button class="add-btn" onclick="addToCart('Badee Amethyste',29)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Badee Sublime.png') }}"><div class="brand">LATTAFA</div><div class="name">Badee Sublime <span class="tag femenino">Femenino</span></div><div class="price">31.8/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Badee Sublime.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Badee Sublime <span class="tag femenino">Femenino</span></div>
+<div class="price">31.8/USD</div>
+<button class="add-btn" onclick="addToCart('Badee Sublime',31.8)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Honor and Glory.png') }}"><div class="brand">LATTAFA</div><div class="name">Honor and Glory <span class="tag unisex">Unisex</span></div><div class="price">32.6/USD</div></div>
+<div class="card" data-gender="unisex">
+<img src="{{ url_for('static', filename='img/Honor and Glory.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Honor and Glory <span class="tag unisex">Unisex</span></div>
+<div class="price">32.6/USD</div>
+<button class="add-btn" onclick="addToCart('Honor and Glory',32.6)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Yara Rosa.png') }}"><div class="brand">LATTAFA</div><div class="name">Yara Rosa <span class="tag femenino">Femenino</span></div><div class="price">31.8/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Yara Rosa.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Yara Rosa <span class="tag femenino">Femenino</span></div>
+<div class="price">31.8/USD</div>
+<button class="add-btn" onclick="addToCart('Yara Rosa',31.8)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Yara Elixir.png') }}"><div class="brand">LATTAFA</div><div class="name">Yara Elixir <span class="tag femenino">Femenino</span></div><div class="price">39.8/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Yara Elixir.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Yara Elixir <span class="tag femenino">Femenino</span></div>
+<div class="price">39.8/USD</div>
+<button class="add-btn" onclick="addToCart('Yara Elixir',39.8)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Yara Candy.png') }}"><div class="brand">LATTAFA</div><div class="name">Yara Candy <span class="tag femenino">Femenino</span></div><div class="price">30.3/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Yara Candy.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Yara Candy <span class="tag femenino">Femenino</span></div>
+<div class="price">30.3/USD</div>
+<button class="add-btn" onclick="addToCart('Yara Candy',30.3)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Vintage Radio.png') }}"><div class="brand">LATTAFA</div><div class="name">Vintage Radio <span class="tag unisex">Unisex</span></div><div class="price">31.8/USD</div></div>
+<div class="card" data-gender="unisex">
+<img src="{{ url_for('static', filename='img/Vintage Radio.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Vintage Radio <span class="tag unisex">Unisex</span></div>
+<div class="price">31.8/USD</div>
+<button class="add-btn" onclick="addToCart('Vintage Radio',31.8)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Mayar Pink.png') }}"><div class="brand">LATTAFA</div><div class="name">Mayar Pink <span class="tag femenino">Femenino</span></div><div class="price">31/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Mayar Pink.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Mayar Pink <span class="tag femenino">Femenino</span></div>
+<div class="price">31/USD</div>
+<button class="add-btn" onclick="addToCart('Mayar Pink',31)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Khamrah Black.png') }}"><div class="brand">LATTAFA</div><div class="name">Khamrah Black <span class="tag unisex">Unisex</span></div><div class="price">31.8/USD</div></div>
+<div class="card" data-gender="unisex">
+<img src="{{ url_for('static', filename='img/Khamrah Black.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Khamrah Black <span class="tag unisex">Unisex</span></div>
+<div class="price">31.8/USD</div>
+<button class="add-btn" onclick="addToCart('Khamrah Black',31.8)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Eclaire.png') }}"><div class="brand">LATTAFA</div><div class="name">Eclaire <span class="tag femenino">Femenino</span></div><div class="price">29.5/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Eclaire.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Eclaire <span class="tag femenino">Femenino</span></div>
+<div class="price">29.5/USD</div>
+<button class="add-btn" onclick="addToCart('Eclaire',29.5)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Ajwad Pink to Pink.png') }}"><div class="brand">LATTAFA</div><div class="name">Ajwad Pink to Pink <span class="tag femenino">Femenino</span></div><div class="price">23.14/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Ajwad Pink to Pink.png') }}">
+<div class="brand">LATTAFA</div>
+<div class="name">Ajwad Pink to Pink <span class="tag femenino">Femenino</span></div>
+<div class="price">23.14/USD</div>
+<button class="add-btn" onclick="addToCart('Ajwad Pink to Pink',23.14)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Yeah Men.png') }}"><div class="brand">MAISON ALHAMBRA</div><div class="name">Yeah Men <span class="tag masculino">Masculino</span></div><div class="price">27/USD</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Yeah Men.png') }}">
+<div class="brand">MAISON ALHAMBRA</div>
+<div class="name">Yeah Men <span class="tag masculino">Masculino</span></div>
+<div class="price">27/USD</div>
+<button class="add-btn" onclick="addToCart('Yeah Men',27)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Salvo Intense.png') }}"><div class="brand">MAISON ALHAMBRA</div><div class="name">Salvo Intense <span class="tag masculino">Masculino</span></div><div class="price">28.7/USD</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Salvo Intense.png') }}">
+<div class="brand">MAISON ALHAMBRA</div>
+<div class="name">Salvo Intense <span class="tag masculino">Masculino</span></div>
+<div class="price">28.7/USD</div>
+<button class="add-btn" onclick="addToCart('Salvo Intense',28.7)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/La Vivacite Intense.png') }}"><div class="brand">MAISON ALHAMBRA</div><div class="name">La Vivacite Intense <span class="tag femenino">Femenino</span></div><div class="price">25.5/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/La Vivacite Intense.png') }}">
+<div class="brand">MAISON ALHAMBRA</div>
+<div class="name">La Vivacite Intense <span class="tag femenino">Femenino</span></div>
+<div class="price">25.5/USD</div>
+<button class="add-btn" onclick="addToCart('La Vivacite Intense',25.5)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Leonie.png') }}"><div class="brand">MAISON ALHAMBRA</div><div class="name">Leonie <span class="tag femenino">Femenino</span></div><div class="price">30.2/USD</div></div>
+<div class="card" data-gender="femenino">
+<img src="{{ url_for('static', filename='img/Leonie.png') }}">
+<div class="brand">MAISON ALHAMBRA</div>
+<div class="name">Leonie <span class="tag femenino">Femenino</span></div>
+<div class="price">30.2/USD</div>
+<button class="add-btn" onclick="addToCart('Leonie',30.2)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Jungle Vibe.png') }}"><div class="brand">RAYHAAN</div><div class="name">Jungle Vibe <span class="tag unisex">Unisex</span></div><div class="price">39.9/USD</div></div>
+<div class="card" data-gender="unisex">
+<img src="{{ url_for('static', filename='img/Jungle Vibe.png') }}">
+<div class="brand">RAYHAAN</div>
+<div class="name">Jungle Vibe <span class="tag unisex">Unisex</span></div>
+<div class="price">39.9/USD</div>
+<button class="add-btn" onclick="addToCart('Jungle Vibe',39.9)">Agregar al carrito</button>
+</div>
 
-<div class="card"><img src="{{ url_for('static', filename='img/Hawas Black.png') }}"><div class="brand">RASASI</div><div class="name">Hawas Black <span class="tag masculino">Masculino</span></div><div class="price">42.14/USD</div></div>
+<div class="card" data-gender="masculino">
+<img src="{{ url_for('static', filename='img/Hawas Black.png') }}">
+<div class="brand">RASASI</div>
+<div class="name">Hawas Black <span class="tag masculino">Masculino</span></div>
+<div class="price">42.14/USD</div>
+<button class="add-btn" onclick="addToCart('Hawas Black',42.14)">Agregar al carrito</button>
+</div>
 
 </div>
 </section>
 
+<button class="cart-button" onclick="toggleCart()">🛒 Pedido <span id="cartCount">0</span></button>
+
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>Tu pedido</h2>
+    <button onclick="toggleCart()">×</button>
+  </div>
+
+  <div id="cartItems"></div>
+
+  <div class="cart-total">Total: <span id="cartTotal">0/USD</span></div>
+
+  <button class="copy-btn" onclick="copyCartLink()">Copiar link del carrito</button>
+  <button class="clear-btn" onclick="clearCart()">Vaciar carrito</button>
+</div>
+
 <script>
-const searchInput = document.getElementById("searchInput");
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let currentGender = "todos";
 
-searchInput.addEventListener("input", () => {
-  const value = searchInput.value.toLowerCase().trim();
-  const cards = document.querySelectorAll(".card");
+function cerrarBanner(){
+  document.getElementById("infoBanner").style.display = "none";
+}
 
-  cards.forEach(card => {
-    const text = card.innerText.toLowerCase();
-    card.style.display = text.includes(value) ? "block" : "none";
+function saveCart(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+function addToCart(name, price){
+  const item = cart.find(p => p.name === name);
+
+  if(item){
+    item.qty++;
+  }else{
+    cart.push({name:name, price:price, qty:1});
+  }
+
+  saveCart();
+  document.getElementById("cartPanel").classList.add("active");
+}
+
+function removeFromCart(name){
+  cart = cart.filter(p => p.name !== name);
+  saveCart();
+}
+
+function changeQty(name, amount){
+  const item = cart.find(p => p.name === name);
+  if(!item) return;
+
+  item.qty += amount;
+
+  if(item.qty <= 0){
+    removeFromCart(name);
+  }else{
+    saveCart();
+  }
+}
+
+function renderCart(){
+  const cartItems = document.getElementById("cartItems");
+  const cartCount = document.getElementById("cartCount");
+  const cartTotal = document.getElementById("cartTotal");
+
+  cartItems.innerHTML = "";
+
+  let total = 0;
+  let count = 0;
+
+  if(cart.length === 0){
+    cartItems.innerHTML = '<p class="empty-cart">Todavía no agregaste productos.</p>';
+  }
+
+  cart.forEach(item => {
+    total += item.price * item.qty;
+    count += item.qty;
+
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <div>
+          <strong>${item.name}</strong>
+          <p>${item.price}/USD x ${item.qty}</p>
+        </div>
+        <div class="qty-controls">
+          <button onclick="changeQty('${item.name}', -1)">-</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty('${item.name}', 1)">+</button>
+        </div>
+      </div>
+    `;
   });
-});
+
+  cartCount.innerText = count;
+  cartTotal.innerText = total.toFixed(2) + "/USD";
+}
+
+function toggleCart(){
+  document.getElementById("cartPanel").classList.toggle("active");
+}
+
+function clearCart(){
+  cart = [];
+  saveCart();
+}
+
+function copyCartLink(){
+  if(cart.length === 0){
+    alert("Tu carrito está vacío");
+    return;
+  }
+
+  const data = encodeURIComponent(JSON.stringify(cart));
+  const link = `${window.location.origin}${window.location.pathname}?pedido=${data}`;
+
+  navigator.clipboard.writeText(link);
+  alert("Link del carrito copiado. Mandámelo por Instagram 📩");
+}
+
+function loadCartFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  const pedido = params.get("pedido");
+
+  if(pedido){
+    try{
+      cart = JSON.parse(decodeURIComponent(pedido));
+      saveCart();
+      document.getElementById("cartPanel").classList.add("active");
+    }catch(e){
+      console.log("Pedido inválido");
+    }
+  }
+}
+
+function filterGender(gender, btn){
+  currentGender = gender;
+
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  applyFilters();
+}
+
+function applyFilters(){
+  const value = document.getElementById("searchInput").value.toLowerCase().trim();
+
+  document.querySelectorAll(".card").forEach(card => {
+    const text = card.innerText.toLowerCase();
+    const gender = card.dataset.gender;
+
+    const matchesText = text.includes(value);
+    const matchesGender = currentGender === "todos" || gender === currentGender;
+
+    card.style.display = matchesText && matchesGender ? "block" : "none";
+  });
+}
+
+document.getElementById("searchInput").addEventListener("input", applyFilters);
+
+loadCartFromUrl();
+renderCart();
 </script>
 
 </body>
