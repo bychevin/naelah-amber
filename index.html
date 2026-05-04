@@ -33,7 +33,7 @@
     <div class="logo">Naelah Amber</div>
 
     <div class="search">
-      <input type="text" id="searchInput" placeholder="Buscar perfume...">
+      <input type="text" id="searchInput" placeholder="Buscar perfume, marca o estilo...">
     </div>
   </div>
 </header>
@@ -41,7 +41,7 @@
 <section class="hero">
   <div>
     <h1>Perfumes Árabes Originales</h1>
-    <p>Catálogo con perfiles olfativos y precios disponibles</p>
+    <p>Catálogo con perfiles olfativos, detalles y precios disponibles</p>
   </div>
 </section>
 
@@ -52,7 +52,65 @@
   <button class="filter-btn" type="button" data-filter="unisex">Unisex</button>
 </section>
 
+<section class="style-filters">
+  <button class="style-btn active" type="button" data-style="todos">Todos los estilos</button>
+  <button class="style-btn" type="button" data-style="dulce">Dulces</button>
+  <button class="style-btn" type="button" data-style="fresco">Frescos</button>
+  <button class="style-btn" type="button" data-style="intenso">Intensos</button>
+  <button class="style-btn" type="button" data-style="gourmand">Gourmand</button>
+  <button class="style-btn" type="button" data-style="noche">Para noche</button>
+  <button class="style-btn" type="button" data-style="diario">Para diario</button>
+</section>
+
+<section class="featured-section">
+  <div class="section-title">
+    <h2>Recomendados</h2>
+    <p>Opciones destacadas para elegir más rápido</p>
+  </div>
+
+  <div class="featured-grid" id="featuredGrid"></div>
+</section>
+
+<section class="recommend-box">
+  <div>
+    <h2>No sé cuál elegir</h2>
+    <p>Elegí lo que buscás y te muestro algunas opciones del catálogo.</p>
+  </div>
+
+  <div class="quiz-controls">
+    <select id="quizScent">
+      <option value="dulce">Dulce</option>
+      <option value="fresco">Fresco</option>
+      <option value="intenso">Intenso</option>
+      <option value="gourmand">Gourmand</option>
+    </select>
+
+    <select id="quizUse">
+      <option value="diario">Para diario</option>
+      <option value="noche">Para noche</option>
+      <option value="calor">Para calor</option>
+      <option value="frio">Para frío</option>
+    </select>
+
+    <select id="quizGender">
+      <option value="todos">Cualquiera</option>
+      <option value="masculino">Masculino</option>
+      <option value="femenino">Femenino</option>
+      <option value="unisex">Unisex</option>
+    </select>
+
+    <button type="button" id="recommendBtn">Recomendar</button>
+  </div>
+
+  <div class="quiz-results" id="quizResults"></div>
+</section>
+
 <section class="catalog">
+  <div class="catalog-head">
+    <h2>Catálogo</h2>
+    <p id="productCount">Mostrando perfumes</p>
+  </div>
+
   <div class="grid" id="productGrid"></div>
 
   <div class="no-results" id="noResults">
@@ -65,8 +123,27 @@
   <h2>¿Cómo comprar?</h2>
   <p>
     Elegí el perfume que te guste, abrí los detalles si querés conocer su estilo,
-    y escribime por Instagram con el nombre del producto.
+    copiá el nombre o mandame captura por Instagram.
   </p>
+
+  <div class="steps">
+    <div>
+      <strong>1</strong>
+      <span>Elegí tu perfume</span>
+    </div>
+    <div>
+      <strong>2</strong>
+      <span>Copiá el nombre o mandá captura</span>
+    </div>
+    <div>
+      <strong>3</strong>
+      <span>Te confirmo stock y precio</span>
+    </div>
+    <div>
+      <strong>4</strong>
+      <span>Coordinamos la entrega</span>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -87,6 +164,7 @@
         <h2 id="modalName"></h2>
         <div class="modal-row">
           <span id="modalGender"></span>
+          <span class="ml-pill" id="modalMl"></span>
           <strong id="modalPrice"></strong>
         </div>
       </div>
@@ -123,11 +201,15 @@
       </div>
     </div>
 
+    <button class="modal-copy-btn" id="modalCopyBtn" type="button">Copiar nombre</button>
+
     <p class="detail-warning">
       Rendimiento estimado: puede variar según piel, clima y cantidad aplicada.
     </p>
   </div>
 </div>
+
+<div class="toast" id="toast">Nombre copiado</div>
 
 <script src="script.js"></script>
 </body>
