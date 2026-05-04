@@ -1,126 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Naelah Amber</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-
-<div class="info-banner" id="infoBanner">
-  <div class="info-box">
-    <p>
-      Antes de comprar 👇<br><br>
-      Mirá el catálogo, buscá el perfume que quieras y mandame captura o el nombre por Instagram 📩<br><br>
-      Así puedo confirmarte disponibilidad, precio y coordinar todo con vos.<br><br>
-      Cualquier duda, escribime sin problema 😉
-    </p>
-    <button type="button" id="closeBannerBtn">Entendido</button>
-  </div>
-</div>
-
-<header>
-  <div class="nav">
-    <div class="logo">Naelah Amber</div>
-    <div class="search">
-      <input type="text" id="searchInput" placeholder="Buscar perfume...">
-    </div>
-  </div>
-</header>
-
-<section class="hero">
-  <div>
-    <h1>Perfumes Árabes Originales</h1>
-    <p>Catálogo con perfiles olfativos y precios disponibles</p>
-  </div>
-</section>
-
-<section class="filters">
-  <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
-  <button class="filter-btn" type="button" data-filter="masculino">Masculino</button>
-  <button class="filter-btn" type="button" data-filter="femenino">Femenino</button>
-  <button class="filter-btn" type="button" data-filter="unisex">Unisex</button>
-</section>
-
-<section class="catalog">
-  <div class="grid" id="productGrid"></div>
-
-  <div class="no-results" id="noResults">
-    No encontré ese perfume 😔<br>
-    Probá buscar por marca, nombre o estilo.
-  </div>
-</section>
-
-<section class="how-to-buy">
-  <h2>¿Cómo comprar?</h2>
-  <p>
-    Elegí el perfume que te guste, abrí los detalles si querés conocer su estilo,
-    y escribime por Instagram con el nombre del producto.
-  </p>
-</section>
-
-<footer>
-  <p>Naelah Amber · Perfumes árabes originales</p>
-  <p>Consultas y pedidos por Instagram 📩</p>
-</footer>
-
-<button class="top-btn" id="topBtn">↑</button>
-
-<div class="details-modal" id="detailsModal">
-  <div class="details-box">
-    <button class="close-modal" id="closeModalBtn">×</button>
-
-    <div class="details-head">
-      <img id="modalImg" src="" alt="">
-      <div>
-        <p class="modal-brand" id="modalBrand"></p>
-        <h2 id="modalName"></h2>
-        <div class="modal-row">
-          <span id="modalGender"></span>
-          <strong id="modalPrice"></strong>
-        </div>
-      </div>
-    </div>
-
-    <div class="details-section">
-      <h3>🌿 Perfil olfativo</h3>
-      <p id="modalProfile"></p>
-    </div>
-
-    <div class="details-section">
-      <h3>✨ Acordes principales</h3>
-      <div class="accords" id="modalAccords"></div>
-    </div>
-
-    <div class="details-section">
-      <h3>🧴 Notas destacadas</h3>
-      <ul id="modalNotes"></ul>
-    </div>
-
-    <div class="details-section">
-      <h3>☁️ Sensación general</h3>
-      <p id="modalFeeling"></p>
-    </div>
-
-    <div class="details-grid">
-      <div>
-        <h3>⏳ Rendimiento</h3>
-        <p id="modalPerformance"></p>
-      </div>
-      <div>
-        <h3>👤 Uso recomendado</h3>
-        <p id="modalUse"></p>
-      </div>
-    </div>
-
-    <p class="detail-warning">
-      Rendimiento estimado: puede variar según piel, clima y cantidad aplicada.
-    </p>
-  </div>
-</div>
-
-<script>
 const products = [
   {
     name:"Durrat Al Aroos",
@@ -143,7 +20,7 @@ const products = [
     gender:"masculino",
     profile:"Fresco, limpio y moderno, con una sensación masculina suave, cremosa y fácil de llevar.",
     accords:["fresco","limpio","cremoso","amaderado","moderno"],
-    notes:["cítricos suaves","almizcle","maderas limpias","toques aromáticos"],
+    notes:["Cítricos suaves","almizcle","maderas limpias","toques aromáticos"],
     feeling:"Huele a hombre arreglado, prolijo y tranquilo. Es de esos perfumes que no molestan y van bien casi siempre.",
     performance:"Duración estimada media: 5–8 horas. Proyección moderada al inicio, después queda más cercano.",
     use:"Muy bueno para diario, oficina, facultad, calor moderado o cuando querés algo seguro y limpio."
@@ -156,7 +33,7 @@ const products = [
     gender:"masculino",
     profile:"Dulce cítrico, caramelizado y llamativo, con una mezcla jugosa de mandarina, dulzor y fondo cálido.",
     accords:["mandarina","caramelo","dulce","ámbar","juvenil"],
-    notes:["mandarina","naranja","caramelo","haba tonka","ámbar","maderas"],
+    notes:["Mandarina","naranja","caramelo","haba tonka","ámbar","maderas"],
     feeling:"Tiene vibra divertida, dulce y bastante llamativa. No es tímido: entra con energía y se siente juvenil.",
     performance:"Duración estimada alta: 7–10 horas. Proyección fuerte al inicio y después moderada.",
     use:"Ideal para noche, salidas, citas, clima fresco o para alguien que quiera destacar."
@@ -169,7 +46,7 @@ const products = [
     gender:"masculino",
     profile:"Cítrico ahumado y amaderado, con salida potente y una base seca, elegante e intensa.",
     accords:["cítrico","ahumado","amaderado","intenso","masculino"],
-    notes:["limón","bergamota","piña","abedul","almizcle","maderas"],
+    notes:["Limón","bergamota","piña","abedul","almizcle","maderas"],
     feeling:"Huele fuerte, serio y con presencia. Tiene esa sensación de perfume masculino elegante, de salida o evento.",
     performance:"Duración estimada alta: 7–10 horas. Proyección fuerte al inicio.",
     use:"Muy bueno para noche, eventos, salidas, clima templado/fresco y ocasiones donde querés presencia."
@@ -182,7 +59,7 @@ const products = [
     gender:"masculino",
     profile:"Fresco, frutal y limpio, con una vibra energética y moderna para todos los días.",
     accords:["fresco","frutal","cítrico","limpio","diario"],
-    notes:["cítricos","manzana","lavanda","maderas suaves","almizcle"],
+    notes:["Cítricos","manzana","lavanda","maderas suaves","almizcle"],
     feeling:"Se siente alegre, limpio y juvenil. Es fácil de usar, no se pone pesado y va muy bien de día.",
     performance:"Duración estimada media-alta: 6–8 horas. Proyección moderada.",
     use:"Ideal para día, calor, estudio, trabajo, gimnasio suave o uso diario."
@@ -195,7 +72,7 @@ const products = [
     gender:"masculino",
     profile:"Dulce, especiado y vainillado, con una salida frutal y un fondo cálido muy llamativo.",
     accords:["vainilla","dulce","ámbar","especiado","nocturno"],
-    notes:["manzana","canela","lavanda","vainilla","haba tonka","ámbar"],
+    notes:["Manzana","canela","lavanda","vainilla","haba tonka","ámbar"],
     feeling:"Tiene vibra de noche, boliche, cita y salida. Dulce, fuerte y muy fácil de notar.",
     performance:"Duración estimada alta: 8–12 horas. Proyección fuerte al inicio.",
     use:"Ideal para noche, otoño/invierno, salidas, citas y momentos donde querés que se note."
@@ -208,7 +85,7 @@ const products = [
     gender:"masculino",
     profile:"Especiado, ambarado y oscuro, con una mezcla cálida de vainilla, tabaco, café y maderas.",
     accords:["especias","ámbar","vainilla","tabaco","oscuro"],
-    notes:["pimienta negra","tabaco","café","vainilla","ámbar","maderas secas"],
+    notes:["Pimienta negra","tabaco","café","vainilla","ámbar","maderas secas"],
     feeling:"Se siente masculino, intenso y elegante. Tiene carácter, no es un perfume suavecito.",
     performance:"Duración estimada alta: 8–10 horas. Proyección fuerte a moderada.",
     use:"Ideal para noche, frío, eventos, salidas y personas que prefieren perfumes intensos."
@@ -219,10 +96,10 @@ const products = [
     price:"47.5/USD",
     img:"Asad Elixir.png",
     gender:"masculino",
-    profile:"Más dulce, denso y profundo que Asad, con sensación especiada, ambarada y envolvente.",
+    profile:"Dulce, denso y profundo, con sensación especiada, ambarada y envolvente.",
     accords:["ámbar","especiado","dulce","intenso","cálido"],
-    notes:["especias","vainilla","ámbar","maderas","toques resinosos"],
-    feeling:"Tiene una presencia pesada y elegante. Se siente más nocturno, más oscuro y más envolvente.",
+    notes:["Especias","vainilla","ámbar","maderas","toques resinosos"],
+    feeling:"Tiene una presencia pesada y elegante. Se siente nocturno, oscuro y envolvente.",
     performance:"Duración estimada alta: 8–12 horas. Proyección marcada al inicio.",
     use:"Mejor para noche, invierno, citas, eventos o cuando querés algo con mucha presencia."
   },
@@ -234,7 +111,7 @@ const products = [
     gender:"femenino",
     profile:"Dulce, floral y avainillado, con un costado cálido y elegante.",
     accords:["rosa","vainilla","ámbar","dulce","floral"],
-    notes:["rosa","pimienta rosa","jazmín","vainilla","ámbar"],
+    notes:["Rosa","pimienta rosa","jazmín","vainilla","ámbar"],
     feeling:"Se siente femenino, cálido y algo misterioso. Dulce sin ser infantil.",
     performance:"Duración estimada media-alta: 6–9 horas. Proyección moderada.",
     use:"Ideal para tarde/noche, clima fresco, citas o salidas."
@@ -247,7 +124,7 @@ const products = [
     gender:"femenino",
     profile:"Frutal dulce, alegre y jugoso, con un lado fresco y femenino.",
     accords:["frutal","dulce","fresco","manzana","juvenil"],
-    notes:["manzana","litchi","rosa","vainilla","musk"],
+    notes:["Manzana","litchi","rosa","vainilla","musk"],
     feeling:"Huele divertido, joven y limpio. Es dulce pero más brillante que pesado.",
     performance:"Duración estimada media: 5–7 horas. Proyección moderada.",
     use:"Muy bueno para día, primavera/verano, salidas casuales y uso diario."
@@ -260,7 +137,7 @@ const products = [
     gender:"unisex",
     profile:"Dulce, tropical y cremoso, con una mezcla llamativa de piña, especias suaves y vainilla.",
     accords:["piña","vainilla","cremoso","dulce","tropical"],
-    notes:["piña","crema","cúrcuma","vainilla","ámbar","maderas"],
+    notes:["Piña","crema","cúrcuma","vainilla","ámbar","maderas"],
     feeling:"Tiene una vibra dulce, distinta y muy agradable. Se siente cálido, exótico y con personalidad.",
     performance:"Duración estimada media-alta: 6–8 horas. Proyección moderada.",
     use:"Ideal para salidas, tarde/noche, clima templado o para alguien que quiere algo diferente."
@@ -273,7 +150,7 @@ const products = [
     gender:"femenino",
     profile:"Dulce, cremosa, tropical y femenina, con una sensación suave y coqueta.",
     accords:["vainilla","tropical","cremoso","dulce","femenino"],
-    notes:["orquídea","mandarina","frutas tropicales","vainilla","almizcle"],
+    notes:["Orquídea","mandarina","frutas tropicales","vainilla","almizcle"],
     feeling:"Huele dulce, limpia y tierna. Tiene vibra femenina, suave y muy fácil de usar.",
     performance:"Duración estimada media: 5–7 horas. Proyección moderada/suave.",
     use:"Ideal para diario, citas tranquilas, primavera/verano y uso casual."
@@ -286,7 +163,7 @@ const products = [
     gender:"femenino",
     profile:"Más dulce, intensa y cremosa que Yara Rosa, con sensación femenina y envolvente.",
     accords:["dulce","vainilla","cremoso","frutal","intenso"],
-    notes:["frutas dulces","flores suaves","vainilla","ámbar","almizcle"],
+    notes:["Frutas dulces","flores suaves","vainilla","ámbar","almizcle"],
     feeling:"Se siente más llamativa y más sensual. Sigue siendo femenina, pero con más presencia.",
     performance:"Duración estimada media-alta: 6–9 horas. Proyección moderada.",
     use:"Ideal para noche, citas, salidas o cuando querés algo dulce con más fuerza."
@@ -299,7 +176,7 @@ const products = [
     gender:"femenino",
     profile:"Dulce tipo golosina, frutal y juvenil, con un estilo divertido y coqueto.",
     accords:["caramelo","frutal","dulce","juvenil","vainilla"],
-    notes:["frutas dulces","caramelo","vainilla","musk","toques florales"],
+    notes:["Frutas dulces","caramelo","vainilla","musk","toques florales"],
     feeling:"Huele alegre, dulce y muy femenino. Tiene vibra de perfume divertido, no serio.",
     performance:"Duración estimada media: 5–7 horas. Proyección moderada.",
     use:"Ideal para día, salidas casuales, verano/primavera y personas que aman perfumes dulces."
@@ -310,9 +187,9 @@ const products = [
     price:"31.8/USD",
     img:"Vintage Radio.png",
     gender:"unisex",
-    profile:"Dulce, aromático y elegante, con frutas, maderas y un toque cálido muy refinado.",
+    profile:"Dulce, aromático y elegante, con frutas, maderas y un toque cálido refinado.",
     accords:["lavanda","frutal","amaderado","dulce","elegante"],
-    notes:["lavanda","ciruela","palo santo","maderas","ámbar"],
+    notes:["Lavanda","ciruela","palo santo","maderas","ámbar"],
     feeling:"Tiene una vibra sofisticada, distinta y moderna. Dulce, pero no básico.",
     performance:"Duración estimada media-alta: 7–9 horas. Proyección moderada.",
     use:"Ideal para tarde/noche, eventos, clima fresco y personas que quieren algo elegante."
@@ -325,7 +202,7 @@ const products = [
     gender:"femenino",
     profile:"Frutal, fresco y femenino, con una salida jugosa y limpia.",
     accords:["frutal","fresco","dulce","floral","juvenil"],
-    notes:["frutas tropicales","flores blancas","vainilla suave","musk"],
+    notes:["Frutas tropicales","flores blancas","vainilla suave","musk"],
     feeling:"Se siente alegre, femenina y fácil de usar. No es pesada, es más fresca y linda.",
     performance:"Duración estimada media: 5–7 horas. Proyección moderada.",
     use:"Ideal para día, calor, primavera/verano y uso diario."
@@ -338,7 +215,7 @@ const products = [
     gender:"unisex",
     profile:"Dulce, especiado y gourmand, con sensación cálida, densa y envolvente.",
     accords:["gourmand","canela","vainilla","ámbar","especiado"],
-    notes:["canela","praliné","vainilla","dátiles","ámbar","maderas dulces"],
+    notes:["Canela","praliné","vainilla","dátiles","ámbar","maderas dulces"],
     feeling:"Huele como algo dulce, cálido y elegante. Tiene vibra de noche, invierno y presencia fuerte.",
     performance:"Duración estimada alta: 8–12 horas. Proyección fuerte al inicio.",
     use:"Ideal para noche, otoño/invierno, citas, eventos y amantes de perfumes dulces profundos."
@@ -351,7 +228,7 @@ const products = [
     gender:"femenino",
     profile:"Gourmand dulce, cremoso y lechoso, con una sensación de vainilla, caramelo y postre.",
     accords:["caramelo","vainilla","leche","gourmand","dulce"],
-    notes:["caramelo","leche","vainilla","azúcar","musk"],
+    notes:["Caramelo","leche","vainilla","azúcar","musk"],
     feeling:"Huele muy comestible, suave y envolvente. Ideal si te gustan los perfumes dulces tipo postre.",
     performance:"Duración estimada media-alta: 6–9 horas. Proyección moderada.",
     use:"Ideal para noche, citas, clima fresco o para alguien que quiere oler dulce y cremoso."
@@ -364,7 +241,7 @@ const products = [
     gender:"femenino",
     profile:"Frutal, dulce y femenino, con sensación suave, alegre y juvenil.",
     accords:["frutal","dulce","floral","suave","femenino"],
-    notes:["frutas rojas","flores suaves","vainilla","musk"],
+    notes:["Frutas rojas","flores suaves","vainilla","musk"],
     feeling:"Tiene una vibra linda, delicada y fácil de llevar. Es dulce pero no tan pesada.",
     performance:"Duración estimada media: 5–7 horas. Proyección moderada/suave.",
     use:"Ideal para día, uso casual, primavera/verano y regalos seguros."
@@ -377,7 +254,7 @@ const products = [
     gender:"masculino",
     profile:"Dulce aromático, especiado y masculino, con una vibra moderna y seductora.",
     accords:["aromático","dulce","especiado","vainilla","masculino"],
-    notes:["manzana","jengibre","salvia","vainilla","haba tonka","maderas"],
+    notes:["Manzana","jengibre","salvia","vainilla","haba tonka","maderas"],
     feeling:"Huele joven, atractivo y de salida. Dulce sin perder lo masculino.",
     performance:"Duración estimada media-alta: 6–9 horas. Proyección moderada.",
     use:"Ideal para noche, citas, salidas, clima fresco y uso casual elegante."
@@ -390,7 +267,7 @@ const products = [
     gender:"masculino",
     profile:"Fresco especiado, intenso y masculino, con salida potente y fondo ambarado.",
     accords:["fresco","especiado","ámbar","limpio","intenso"],
-    notes:["bergamota","pimienta","lavanda","ámbar","maderas"],
+    notes:["Bergamota","pimienta","lavanda","ámbar","maderas"],
     feeling:"Da sensación de perfume masculino fuerte, limpio y seguro. Muy fácil de reconocer.",
     performance:"Duración estimada alta: 7–10 horas. Proyección fuerte al inicio.",
     use:"Ideal para noche, salidas, clima fresco y personas que quieren algo intenso."
@@ -403,7 +280,7 @@ const products = [
     gender:"femenino",
     profile:"Dulce, elegante y femenino, con un estilo floral-frutal y fondo cálido.",
     accords:["floral","dulce","frutal","elegante","vainilla"],
-    notes:["frutas dulces","flores blancas","vainilla","maderas suaves"],
+    notes:["Frutas dulces","flores blancas","vainilla","maderas suaves"],
     feeling:"Huele arreglada, femenina y con presencia. No es infantil; tiene un aire más elegante.",
     performance:"Duración estimada media: 5–8 horas. Proyección moderada.",
     use:"Ideal para tarde, noche suave, eventos, citas o uso diario elegante."
@@ -416,7 +293,7 @@ const products = [
     gender:"femenino",
     profile:"Floral dulce, femenino y sofisticado, con sensación limpia y delicada.",
     accords:["floral","limpio","dulce","almizcle","elegante"],
-    notes:["flores suaves","cítricos delicados","vainilla ligera","almizcle"],
+    notes:["Flores suaves","cítricos delicados","vainilla ligera","almizcle"],
     feeling:"Se siente fino, femenino y pulcro. Es más elegante que explosivo.",
     performance:"Duración estimada media: 5–7 horas. Proyección moderada/suave.",
     use:"Ideal para diario, oficina, eventos tranquilos y primavera."
@@ -429,7 +306,7 @@ const products = [
     gender:"unisex",
     profile:"Frutal, verde y exótico, con una vibra tropical y moderna.",
     accords:["tropical","verde","frutal","fresco","exótico"],
-    notes:["frutas tropicales","notas verdes","maderas suaves","almizcle"],
+    notes:["Frutas tropicales","notas verdes","maderas suaves","almizcle"],
     feeling:"Huele distinto, fresco y divertido. Tiene personalidad sin ser demasiado pesado.",
     performance:"Duración estimada media: 5–8 horas. Proyección moderada.",
     use:"Ideal para día, calor, salidas casuales y quienes buscan algo diferente."
@@ -442,7 +319,7 @@ const products = [
     gender:"masculino",
     profile:"Fresco oscuro, especiado y amaderado, con una vibra masculina moderna e intensa.",
     accords:["fresco","oscuro","amaderado","especiado","masculino"],
-    notes:["cítricos","especias","maderas","ámbar","musk"],
+    notes:["Cítricos","especias","maderas","ámbar","musk"],
     feeling:"Se siente fuerte, masculino y de presencia. Más serio que dulce.",
     performance:"Duración estimada alta: 7–10 horas. Proyección fuerte a moderada.",
     use:"Ideal para noche, eventos, clima templado/fresco y salidas."
@@ -484,7 +361,7 @@ function renderProducts(){
     card.dataset.search = `${product.name} ${product.brand} ${product.gender} ${product.profile} ${product.accords.join(" ")}`.toLowerCase();
 
     card.innerHTML = `
-      <img src="/static/img/${product.img}" alt="${product.name}">
+      <img src="img/${product.img}" alt="${product.name}">
       <div class="brand">${product.brand}</div>
       <div class="name">
         ${product.name}
@@ -505,7 +382,7 @@ function renderProducts(){
 }
 
 function openDetails(product){
-  modalImg.src = `/static/img/${product.img}`;
+  modalImg.src = `img/${product.img}`;
   modalImg.alt = product.name;
   modalBrand.innerText = product.brand;
   modalName.innerText = product.name;
@@ -586,8 +463,22 @@ topBtn.addEventListener("click", () => {
   window.scrollTo({top:0, behavior:"smooth"});
 });
 
-renderProducts();
-</script>
+renderProducts(); 
 
-</body>
-</html>
+function setupScrollAnimations(){
+  const animatedElements = document.querySelectorAll(".card, .how-to-buy");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add("show");
+      }
+    });
+  }, {
+    threshold: 0.12
+  });
+
+  animatedElements.forEach(el => observer.observe(el));
+}
+
+setupScrollAnimations();

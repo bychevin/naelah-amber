@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naelah Amber</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="info-banner" id="infoBanner">
+  <div class="info-box">
+    <p>
+      Antes de comprar 👇<br><br>
+      Mirá el catálogo, buscá el perfume que quieras y mandame captura o el nombre por Instagram 📩<br><br>
+      Así puedo confirmarte disponibilidad, precio y coordinar todo con vos.<br><br>
+      Cualquier duda, escribime sin problema 😉
+    </p>
+    <button type="button" id="closeBannerBtn">Entendido</button>
+  </div>
+</div>
+
+<header>
+  <div class="nav">
+    <div class="logo">Naelah Amber</div>
+
+    <div class="search">
+      <input type="text" id="searchInput" placeholder="Buscar perfume...">
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Perfumes Árabes Originales</h1>
+    <p>Catálogo con perfiles olfativos y precios disponibles</p>
+  </div>
+</section>
+
+<section class="filters">
+  <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
+  <button class="filter-btn" type="button" data-filter="masculino">Masculino</button>
+  <button class="filter-btn" type="button" data-filter="femenino">Femenino</button>
+  <button class="filter-btn" type="button" data-filter="unisex">Unisex</button>
+</section>
+
+<section class="catalog">
+  <div class="grid" id="productGrid"></div>
+
+  <div class="no-results" id="noResults">
+    No encontré ese perfume 😔<br>
+    Probá buscar por marca, nombre o estilo.
+  </div>
+</section>
+
+<section class="how-to-buy">
+  <h2>¿Cómo comprar?</h2>
+  <p>
+    Elegí el perfume que te guste, abrí los detalles si querés conocer su estilo,
+    y escribime por Instagram con el nombre del producto.
+  </p>
+</section>
+
+<footer>
+  <p>Naelah Amber · Perfumes árabes originales</p>
+  <p>Consultas y pedidos por Instagram 📩</p>
+</footer>
+
+<button class="top-btn" id="topBtn">↑</button>
+
+<div class="details-modal" id="detailsModal">
+  <div class="details-box">
+    <button class="close-modal" id="closeModalBtn">×</button>
+
+    <div class="details-head">
+      <img id="modalImg" src="" alt="">
+      <div>
+        <p class="modal-brand" id="modalBrand"></p>
+        <h2 id="modalName"></h2>
+        <div class="modal-row">
+          <span id="modalGender"></span>
+          <strong id="modalPrice"></strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-section">
+      <h3>🌿 Perfil olfativo</h3>
+      <p id="modalProfile"></p>
+    </div>
+
+    <div class="details-section">
+      <h3>✨ Acordes principales</h3>
+      <div class="accords" id="modalAccords"></div>
+    </div>
+
+    <div class="details-section">
+      <h3>🧴 Notas destacadas</h3>
+      <ul id="modalNotes"></ul>
+    </div>
+
+    <div class="details-section">
+      <h3>☁️ Sensación general</h3>
+      <p id="modalFeeling"></p>
+    </div>
+
+    <div class="details-grid">
+      <div>
+        <h3>⏳ Rendimiento</h3>
+        <p id="modalPerformance"></p>
+      </div>
+      <div>
+        <h3>👤 Uso recomendado</h3>
+        <p id="modalUse"></p>
+      </div>
+    </div>
+
+    <p class="detail-warning">
+      Rendimiento estimado: puede variar según piel, clima y cantidad aplicada.
+    </p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
