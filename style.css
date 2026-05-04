@@ -26,6 +26,7 @@ radial-gradient(circle at top,#1a1a1a 0%,#070707 32%,#050505 100%);
 color:white;
 overflow-x:hidden;
 min-height:100vh;
+position:relative;
 }
 
 body::before{
@@ -33,14 +34,80 @@ content:"";
 position:fixed;
 inset:0;
 pointer-events:none;
-z-index:-1;
+z-index:-3;
 background:
 radial-gradient(circle at 20% 20%,rgba(212,175,55,.08),transparent 28%),
 radial-gradient(circle at 85% 30%,rgba(255,255,255,.04),transparent 25%),
 linear-gradient(180deg,rgba(255,255,255,.02),transparent 45%);
 }
 
-/* HEADER */
+body::after{
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:-2;
+background-image:
+linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+background-size:70px 70px;
+mask-image:linear-gradient(to bottom, rgba(0,0,0,.8), transparent 80%);
+opacity:.35;
+}
+
+.ambient-light{
+position:fixed;
+inset:0;
+z-index:-4;
+pointer-events:none;
+overflow:hidden;
+}
+
+.light-orb{
+position:absolute;
+width:360px;
+height:360px;
+border-radius:50%;
+filter:blur(45px);
+opacity:.18;
+animation:orbFloat 12s ease-in-out infinite alternate;
+}
+
+.light-orb.one{
+background:#d4af37;
+top:10%;
+left:8%;
+}
+
+.light-orb.two{
+background:#ffffff;
+top:35%;
+right:5%;
+animation-delay:2s;
+opacity:.08;
+}
+
+.light-orb.three{
+background:#b48a2c;
+bottom:8%;
+left:35%;
+animation-delay:4s;
+opacity:.12;
+}
+
+.sparkles{
+position:fixed;
+inset:0;
+z-index:-1;
+pointer-events:none;
+background-image:
+radial-gradient(circle, rgba(212,175,55,.35) 1px, transparent 1.5px),
+radial-gradient(circle, rgba(255,255,255,.18) 1px, transparent 1.5px);
+background-size:120px 120px, 180px 180px;
+background-position:0 0, 60px 80px;
+animation:sparkleMove 18s linear infinite;
+opacity:.18;
+}
 
 header{
 position:sticky;
@@ -105,8 +172,6 @@ box-shadow:0 0 22px rgba(212,175,55,.28);
 transform:translateY(-1px);
 }
 
-/* HERO */
-
 .hero{
 height:285px;
 display:flex;
@@ -114,7 +179,7 @@ justify-content:center;
 align-items:center;
 text-align:center;
 background:
-radial-gradient(circle at center,#1d1d1d,#090909 68%);
+radial-gradient(circle at center,rgba(29,29,29,.85),rgba(9,9,9,.9) 68%);
 padding:20px;
 position:relative;
 overflow:hidden;
@@ -158,8 +223,6 @@ margin-top:14px;
 font-size:18px;
 color:#bbb;
 }
-
-/* FILTROS */
 
 .filters{
 max-width:1200px;
@@ -205,8 +268,6 @@ color:#050505;
 box-shadow:0 0 22px rgba(212,175,55,.35);
 transform:translateY(-2px);
 }
-
-/* CATÁLOGO */
 
 .catalog{
 max-width:1200px;
@@ -359,8 +420,6 @@ box-shadow:0 0 18px rgba(212,175,55,.35);
 transform:translateY(-2px);
 }
 
-/* TAGS */
-
 .tag{
 display:inline-block;
 font-size:11px;
@@ -396,8 +455,6 @@ color:#aaa;
 font-size:20px;
 padding:40px 20px;
 }
-
-/* BANNER */
 
 .info-banner{
 position:fixed;
@@ -448,8 +505,6 @@ transition:.25s ease;
 transform:translateY(-2px);
 box-shadow:0 0 18px rgba(212,175,55,.35);
 }
-
-/* CÓMO COMPRAR */
 
 .how-to-buy{
 max-width:900px;
@@ -516,8 +571,6 @@ transition:.25s ease;
 .top-btn:hover{
 transform:translateY(-3px) scale(1.05);
 }
-
-/* MODAL DETALLES */
 
 .details-modal{
 position:fixed;
@@ -691,8 +744,6 @@ font-size:13px;
 text-align:center;
 }
 
-/* ANIMACIONES */
-
 @keyframes slideDown{
 from{opacity:0;transform:translateY(-25px);}
 to{opacity:1;transform:translateY(0);}
@@ -728,11 +779,20 @@ from{transform:translate(-30px,-20px) scale(1);}
 to{transform:translate(35px,20px) scale(1.12);}
 }
 
+@keyframes orbFloat{
+0%{transform:translate(0,0) scale(1);}
+50%{transform:translate(45px,-25px) scale(1.12);}
+100%{transform:translate(-25px,35px) scale(.95);}
+}
+
+@keyframes sparkleMove{
+from{background-position:0 0, 60px 80px;}
+to{background-position:120px 240px, 240px 360px;}
+}
+
 @keyframes logoLine{
 to{width:100%;}
 }
-
-/* TABLET */
 
 @media(max-width:900px){
 .logo{
@@ -747,8 +807,6 @@ font-size:48px;
 grid-template-columns:repeat(2,1fr);
 }
 }
-
-/* CELULAR */
 
 @media(max-width:600px){
 header{
@@ -895,6 +953,16 @@ justify-content:center;
 .details-grid{
 grid-template-columns:1fr;
 }
+
+.light-orb{
+width:260px;
+height:260px;
+filter:blur(38px);
+}
+
+.sparkles{
+opacity:.12;
+}
 }
 
 @keyframes mobileSheet{
@@ -922,4 +990,4 @@ font-size:20px;
 .price{
 font-size:19px;
 }
-}
+}   
