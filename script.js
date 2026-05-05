@@ -488,36 +488,6 @@ function getFilteredProducts(){
   });
 }
 
-const DOLAR_NAELAH = 1405;
-
-function getUsdNumber(priceText){
-  const match = String(priceText).replace(",", ".").match(/\d+(\.\d+)?/);
-  return match ? Number(match[0]) : 0;
-}
-
-function formatARSFromPrice(priceText){
-  const usd = getUsdNumber(priceText);
-  const ars = Math.round(usd * DOLAR_NAELAH);
-  return ars.toLocaleString("es-AR");
-}
-
-function getPriceHTML(product){
-  return `
-    <div class="price-box">
-      <div class="price-usd">${product.price}</div>
-      <div class="price-ars">$${formatARSFromPrice(product.price)} ARS</div>
-    </div>
-  `;
-}
-
-function getPriceInlineHTML(product){
-  return `
-    <span class="inline-usd">${product.price}</span>
-    <span class="inline-separator">·</span>
-    <span class="inline-ars">$${formatARSFromPrice(product.price)} ARS</span>
-  `;
-}
-
 function showToast(text){
   toast.innerText = text;
   toast.classList.add("show");
@@ -583,7 +553,7 @@ function renderFeatured(){
       <div class="featured-info">
         <small>${product.brand}</small>
         <h3>${product.name}</h3>
-        <p class="featured-price-line">${getPriceInlineHTML(product)} · ${product.ml}</p>
+        <p>${product.price} · ${product.ml}</p>
       </div>
     `;
 
@@ -622,7 +592,7 @@ function renderProducts(){
         ${product.styles.slice(0,3).map(style => `<span>${style}</span>`).join("")}
       </div>
 
-      <div class="price">${getPriceHTML(product)}</div>
+      <div class="price">${product.price}</div>
 
       <div class="card-actions">
         <button class="detail-btn" type="button" data-index="${index}">Ver detalles</button>
@@ -659,12 +629,7 @@ function openDetails(product){
   modalGender.innerText = genderLabel(product.gender);
   modalGender.className = `tag ${product.gender}`;
   modalMl.innerText = product.ml;
-  modalPrice.innerHTML = `
-    <span class="modal-price-box">
-      <span class="modal-price-usd">${product.price}</span>
-      <span class="modal-price-ars">$${formatARSFromPrice(product.price)} ARS</span>
-    </span>
-  `;
+  modalPrice.innerText = product.price;
   modalProfile.innerText = product.profile;
   modalFeeling.innerText = product.feeling;
   modalPerformance.innerText = product.performance;
@@ -866,7 +831,7 @@ document.getElementById("recommendBtn").addEventListener("click", () => {
     div.className = "quiz-card";
     div.innerHTML = `
       <strong>${product.name}</strong>
-      <span class="quiz-price-line">${getPriceInlineHTML(product)} · ${product.ml}</span>
+      <span>${product.price} · ${product.ml}</span>
       <p>${product.badge} · ${product.styles.slice(0,3).join(" · ")}</p>
     `;
 
