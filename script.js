@@ -841,3 +841,28 @@ document.getElementById("recommendBtn").addEventListener("click", () => {
 });
 
 renderProducts();
+
+renderProducts(); function trackVisit(){
+  const alreadyTracked = sessionStorage.getItem("naelahVisitTracked");
+
+  if(alreadyTracked === "true"){
+    return;
+  }
+
+  sessionStorage.setItem("naelahVisitTracked", "true");
+
+  fetch("https://naelah-api.vercel.app/api/visit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      page: window.location.href,
+      referrer: document.referrer || null,
+      device_width: window.innerWidth,
+      device_height: window.innerHeight
+    })
+  }).catch(() => {});
+}
+
+trackVisit();
