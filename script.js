@@ -431,6 +431,7 @@ let currentStyle = "todos";
 let currentModalProduct = null;
 let observer = null;
 let mobileShowAll = false;
+let wasMobile = window.innerWidth <= 600;
 
 const productGrid = document.getElementById("productGrid");
 const featuredGrid = document.getElementById("featuredGrid");
@@ -746,10 +747,11 @@ topBtn.addEventListener("click", () => {
 });
 
 window.addEventListener("resize", () => {
-  if(window.innerWidth > 600){
-    mobileShowAll = true;
-  }else{
+  const isMobile = window.innerWidth <= 600;
+
+  if(isMobile !== wasMobile){
     mobileShowAll = false;
+    wasMobile = isMobile;
   }
 
   applyFilters();
