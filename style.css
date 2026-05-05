@@ -2474,3 +2474,109 @@ font-size:14px !important;
     font-size:14px;
   }
 }
+
+/* ========================================================= */
+/* PRECIOS USD + PESOS ARGENTINOS                            */
+/* ========================================================= */
+
+.price{
+  margin-top:10px !important;
+}
+
+.price-box{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.price-usd{
+  color:#d4af37;
+  font-size:24px;
+  font-weight:900;
+  line-height:1.1;
+}
+
+.price-ars{
+  color:#f1e8c9;
+  font-size:16px;
+  font-weight:900;
+  line-height:1.15;
+}
+
+.featured-price-line,
+.quiz-price-line{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+.inline-usd{
+  color:#d4af37;
+  font-weight:900;
+}
+
+.inline-separator{
+  color:#d4af37;
+  opacity:.7;
+}
+
+.inline-ars{
+  color:#f1e8c9;
+  font-weight:900;
+}
+
+.modal-price-box{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  align-items:flex-start;
+}
+
+.modal-price-usd{
+  color:#d4af37;
+  font-size:23px;
+  font-weight:900;
+  line-height:1.1;
+}
+
+.modal-price-ars{
+  color:#f1e8c9;
+  font-size:18px;
+  font-weight:900;
+  line-height:1.1;
+}
+
+@media(max-width:600px){
+
+  .price-box{
+    gap:2px;
+  }
+
+  .price-usd{
+    font-size:16px !important;
+  }
+
+  .price-ars{
+    font-size:12px !important;
+  }
+
+  .featured-price-line,
+  .quiz-price-line{
+    justify-content:center;
+    font-size:11px !important;
+    gap:4px;
+  }
+
+  .modal-price-box{
+    align-items:center;
+  }
+
+  .modal-price-usd{
+    font-size:22px;
+  }
+
+  .modal-price-ars{
+    font-size:16px;
+  }
+}
