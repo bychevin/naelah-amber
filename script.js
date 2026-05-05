@@ -430,8 +430,18 @@ let currentGender = "todos";
 let currentStyle = "todos";
 let currentModalProduct = null;
 let observer = null;
-let mobileShowAll = false;
-let wasMobile = window.innerWidth <= 600;
+
+/*
+  Estado de "Ver todo".
+  sessionStorage hace que Safari/iPhone no lo cierre de la nada cuando cambia la barra del navegador.
+*/
+let mobileShowAll = sessionStorage.getItem("naelahMobileShowAll") === "true";
+
+/*
+  Usamos matchMedia en vez de resize.
+  En iPhone Safari, resize se dispara al scrollear por la barra superior/inferior.
+*/
+const mobileQuery = window.matchMedia("(max-width: 600px)");
 
 const productGrid = document.getElementById("productGrid");
 const featuredGrid = document.getElementById("featuredGrid");
@@ -646,7 +656,7 @@ function applyFilters(){
   const visibleProducts = getFilteredProducts();
   const visibleNames = visibleProducts.map(product => product.name);
 
-  const isMobile = window.innerWidth <= 600;
+  const isMobile = mobileQuery.matches;
   const mobileLimit = 8;
 
   let realMatchCount = 0;
@@ -676,10 +686,6 @@ function applyFilters(){
     productCount.innerText = `Mostrando ${mobileLimit} de ${realMatchCount} perfumes`;
     mobileShowMoreBtn.classList.add("visible");
     mobileShowMoreBtn.innerText = "Ver todo";
-  }else if(isMobile && mobileShowAll && realMatchCount > mobileLimit){
-    productCount.innerText = `Mostrando ${realMatchCount} perfumes`;
-    mobileShowMoreBtn.classList.add("visible");
-    mobileShowMoreBtn.innerText = "Ver menos";
   }else{
     productCount.innerText = `Mostrando ${realMatchCount} de ${products.length} perfumes`;
     mobileShowMoreBtn.classList.remove("visible");
@@ -692,8 +698,12 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
+
     currentGender = btn.dataset.filter;
+
     mobileShowAll = false;
+    sessionStorage.removeItem("naelahMobileShowAll");
+
     applyFilters();
   });
 });
@@ -702,19 +712,25 @@ document.querySelectorAll(".style-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".style-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
+
     currentStyle = btn.dataset.style;
+
     mobileShowAll = false;
+    sessionStorage.removeItem("naelahMobileShowAll");
+
     applyFilters();
   });
 });
 
 searchInput.addEventListener("input", () => {
   mobileShowAll = false;
+  sessionStorage.removeItem("naelahMobileShowAll");
   applyFilters();
 });
 
 mobileShowMoreBtn.addEventListener("click", () => {
-  mobileShowAll = !mobileShowAll;
+  mobileShowAll = true;
+  sessionStorage.setItem("naelahMobileShowAll", "true");
   applyFilters();
 });
 
@@ -746,15 +762,22 @@ topBtn.addEventListener("click", () => {
   window.scrollTo({top:0, behavior:"smooth"});
 });
 
-window.addEventListener("resize", () => {
-  const isMobile = window.innerWidth <= 600;
-
-  if(isMobile !== wasMobile){
-    mobileShowAll = false;
-    wasMobile = isMobile;
-  }
-
+function handleMobileModeChange(){
+  mobileShowAll = false;
+  sessionStorage.removeItem("naelahMobileShowAll");
   applyFilters();
+}
+
+if(typeof mobileQuery.addEventListener === "function"){
+  mobileQuery.addEventListener("change", handleMobileModeChange);
+}else if(typeof mobileQuery.addListener === "function"){
+  mobileQuery.addListener(handleMobileModeChange);
+}
+
+window.addEventListener("orientationchange", () => {
+  setTimeout(() => {
+    applyFilters();
+  }, 400);
 });
 
 function setupScrollAnimations(){
