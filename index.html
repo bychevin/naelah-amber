@@ -1,216 +1,228 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Naelah Amber</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naelah Amber</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="ambient-light">
-  <div class="light-orb one"></div>
-  <div class="light-orb two"></div>
-  <div class="light-orb three"></div>
-</div>
+  <div class="ambient-light">
+    <div class="light-orb one"></div>
+    <div class="light-orb two"></div>
+    <div class="light-orb three"></div>
+  </div>
 
-<div class="sparkles"></div>
+  <div class="sparkles"></div>
 
-<div class="info-banner" id="infoBanner">
-  <div class="info-box">
+  <div class="info-banner" id="infoBanner">
+    <div class="info-box">
+      <p>
+        Antes de comprar 👇<br><br>
+        Mirá el catálogo, buscá el perfume que quieras y mandame captura o el nombre por Instagram 📩<br><br>
+        Así puedo confirmarte disponibilidad, precio y coordinar todo con vos.<br><br>
+        Cualquier duda, escribime sin problema 😉
+      </p>
+      <button type="button" id="closeBannerBtn">Entendido</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="nav">
+      <div class="logo">Naelah Amber</div>
+
+      <div class="search">
+        <input type="text" id="searchInput" placeholder="Buscar perfume, marca o estilo...">
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Perfumes Árabes Originales</h1>
+      <p>Catálogo con perfiles olfativos, detalles y precios disponibles</p>
+    </div>
+  </section>
+
+  <section class="filters">
+    <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
+    <button class="filter-btn" type="button" data-filter="masculino">Masculino</button>
+    <button class="filter-btn" type="button" data-filter="femenino">Femenino</button>
+    <button class="filter-btn" type="button" data-filter="unisex">Unisex</button>
+  </section>
+
+  <section class="style-filters">
+    <button class="style-btn active" type="button" data-style="todos">Todos los estilos</button>
+    <button class="style-btn" type="button" data-style="dulce">Dulces</button>
+    <button class="style-btn" type="button" data-style="fresco">Frescos</button>
+    <button class="style-btn" type="button" data-style="intenso">Intensos</button>
+    <button class="style-btn" type="button" data-style="gourmand">Gourmand</button>
+    <button class="style-btn" type="button" data-style="noche">Para noche</button>
+    <button class="style-btn" type="button" data-style="diario">Para diario</button>
+  </section>
+
+  <section class="featured-section">
+    <div class="section-title">
+      <h2>Recomendados</h2>
+      <p>Opciones destacadas para elegir más rápido</p>
+    </div>
+
+    <div class="featured-grid" id="featuredGrid"></div>
+  </section>
+
+  <section class="recommend-box">
+    <div>
+      <h2>No sé cuál elegir</h2>
+      <p>Elegí lo que buscás y te muestro algunas opciones del catálogo.</p>
+    </div>
+
+    <div class="quiz-controls">
+      <select id="quizScent">
+        <option value="dulce">Dulce</option>
+        <option value="fresco">Fresco</option>
+        <option value="intenso">Intenso</option>
+        <option value="gourmand">Gourmand</option>
+      </select>
+
+      <select id="quizUse">
+        <option value="diario">Para diario</option>
+        <option value="noche">Para noche</option>
+        <option value="calor">Para calor</option>
+        <option value="frio">Para frío</option>
+      </select>
+
+      <select id="quizGender">
+        <option value="todos">Cualquiera</option>
+        <option value="masculino">Masculino</option>
+        <option value="femenino">Femenino</option>
+        <option value="unisex">Unisex</option>
+      </select>
+
+      <button type="button" id="recommendBtn">Recomendar</button>
+    </div>
+
+    <div class="quiz-results" id="quizResults"></div>
+  </section>
+
+  <section class="catalog">
+    <div class="catalog-head">
+      <h2>Catálogo</h2>
+      <p id="productCount">Mostrando perfumes</p>
+    </div>
+
+    <div class="grid" id="productGrid"></div>
+
+    <button class="mobile-show-more" id="mobileShowMoreBtn" type="button">
+      Ver todo
+    </button>
+
+    <div class="no-results" id="noResults">
+      No encontré ese perfume 😔<br>
+      Probá buscar por marca, nombre o estilo.
+    </div>
+  </section>
+
+  <section class="how-to-buy">
+    <h2>¿Cómo comprar?</h2>
     <p>
-      Antes de comprar 👇<br><br>
-      Mirá el catálogo, buscá el perfume que quieras y mandame captura o el nombre por Instagram 📩<br><br>
-      Así puedo confirmarte disponibilidad, precio y coordinar todo con vos.<br><br>
-      Cualquier duda, escribime sin problema 😉
+      Elegí el perfume que te guste, abrí los detalles si querés conocer su estilo,
+      copiá el nombre o mandame captura por Instagram.
     </p>
-    <button type="button" id="closeBannerBtn">Entendido</button>
-  </div>
-</div>
 
-<header>
-  <div class="nav">
-    <div class="logo">Naelah Amber</div>
-
-    <div class="search">
-      <input type="text" id="searchInput" placeholder="Buscar perfume, marca o estilo...">
-    </div>
-  </div>
-</header>
-
-<section class="hero">
-  <div>
-    <h1>Perfumes Árabes Originales</h1>
-    <p>Catálogo con perfiles olfativos, detalles y precios disponibles</p>
-  </div>
-</section>
-
-<section class="filters">
-  <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
-  <button class="filter-btn" type="button" data-filter="masculino">Masculino</button>
-  <button class="filter-btn" type="button" data-filter="femenino">Femenino</button>
-  <button class="filter-btn" type="button" data-filter="unisex">Unisex</button>
-</section>
-
-<section class="style-filters">
-  <button class="style-btn active" type="button" data-style="todos">Todos los estilos</button>
-  <button class="style-btn" type="button" data-style="dulce">Dulces</button>
-  <button class="style-btn" type="button" data-style="fresco">Frescos</button>
-  <button class="style-btn" type="button" data-style="intenso">Intensos</button>
-  <button class="style-btn" type="button" data-style="gourmand">Gourmand</button>
-  <button class="style-btn" type="button" data-style="noche">Para noche</button>
-  <button class="style-btn" type="button" data-style="diario">Para diario</button>
-</section>
-
-<section class="featured-section">
-  <div class="section-title">
-    <h2>Recomendados</h2>
-    <p>Opciones destacadas para elegir más rápido</p>
-  </div>
-
-  <div class="featured-grid" id="featuredGrid"></div>
-</section>
-
-<section class="recommend-box">
-  <div>
-    <h2>No sé cuál elegir</h2>
-    <p>Elegí lo que buscás y te muestro algunas opciones del catálogo.</p>
-  </div>
-
-  <div class="quiz-controls">
-    <select id="quizScent">
-      <option value="dulce">Dulce</option>
-      <option value="fresco">Fresco</option>
-      <option value="intenso">Intenso</option>
-      <option value="gourmand">Gourmand</option>
-    </select>
-
-    <select id="quizUse">
-      <option value="diario">Para diario</option>
-      <option value="noche">Para noche</option>
-      <option value="calor">Para calor</option>
-      <option value="frio">Para frío</option>
-    </select>
-
-    <select id="quizGender">
-      <option value="todos">Cualquiera</option>
-      <option value="masculino">Masculino</option>
-      <option value="femenino">Femenino</option>
-      <option value="unisex">Unisex</option>
-    </select>
-
-    <button type="button" id="recommendBtn">Recomendar</button>
-  </div>
-
-  <div class="quiz-results" id="quizResults"></div>
-</section>
-
-<section class="catalog">
-  <div class="catalog-head">
-    <h2>Catálogo</h2>
-    <p id="productCount">Mostrando perfumes</p>
-  </div>
-
-  <div class="grid" id="productGrid"></div>
-
-  <div class="no-results" id="noResults">
-    No encontré ese perfume 😔<br>
-    Probá buscar por marca, nombre o estilo.
-  </div>
-</section>
-
-<section class="how-to-buy">
-  <h2>¿Cómo comprar?</h2>
-  <p>
-    Elegí el perfume que te guste, abrí los detalles si querés conocer su estilo,
-    copiá el nombre o mandame captura por Instagram.
-  </p>
-
-  <div class="steps">
-    <div>
-      <strong>1</strong>
-      <span>Elegí tu perfume</span>
-    </div>
-    <div>
-      <strong>2</strong>
-      <span>Copiá el nombre o mandá captura</span>
-    </div>
-    <div>
-      <strong>3</strong>
-      <span>Te confirmo stock y precio</span>
-    </div>
-    <div>
-      <strong>4</strong>
-      <span>Coordinamos la entrega</span>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <p>Naelah Amber · Perfumes árabes originales</p>
-  <p>Consultas y pedidos por Instagram 📩</p>
-</footer>
-
-<button class="top-btn" id="topBtn">↑</button>
-
-<div class="details-modal" id="detailsModal">
-  <div class="details-box">
-    <button class="close-modal" id="closeModalBtn">×</button>
-
-    <div class="details-head">
-      <img id="modalImg" src="" alt="">
+    <div class="steps">
       <div>
-        <p class="modal-brand" id="modalBrand"></p>
-        <h2 id="modalName"></h2>
-        <div class="modal-row">
-          <span id="modalGender"></span>
-          <span class="ml-pill" id="modalMl"></span>
-          <strong id="modalPrice"></strong>
+        <strong>1</strong>
+        <span>Elegí tu perfume</span>
+      </div>
+
+      <div>
+        <strong>2</strong>
+        <span>Copiá el nombre o mandá captura</span>
+      </div>
+
+      <div>
+        <strong>3</strong>
+        <span>Te confirmo stock y precio</span>
+      </div>
+
+      <div>
+        <strong>4</strong>
+        <span>Coordinamos la entrega</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Naelah Amber · Perfumes árabes originales</p>
+    <p>Consultas y pedidos por Instagram 📩</p>
+  </footer>
+
+  <button class="top-btn" id="topBtn" type="button">↑</button>
+
+  <div class="details-modal" id="detailsModal">
+    <div class="details-box">
+      <button class="close-modal" id="closeModalBtn" type="button">×</button>
+
+      <div class="details-head">
+        <img id="modalImg" src="" alt="">
+
+        <div>
+          <p class="modal-brand" id="modalBrand"></p>
+          <h2 id="modalName"></h2>
+
+          <div class="modal-row">
+            <span id="modalGender"></span>
+            <span class="ml-pill" id="modalMl"></span>
+            <strong id="modalPrice"></strong>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="details-section">
-      <h3>🌿 Perfil olfativo</h3>
-      <p id="modalProfile"></p>
-    </div>
-
-    <div class="details-section">
-      <h3>✨ Acordes principales</h3>
-      <div class="accords" id="modalAccords"></div>
-    </div>
-
-    <div class="details-section">
-      <h3>🧴 Notas destacadas</h3>
-      <ul id="modalNotes"></ul>
-    </div>
-
-    <div class="details-section">
-      <h3>☁️ Sensación general</h3>
-      <p id="modalFeeling"></p>
-    </div>
-
-    <div class="details-grid">
-      <div>
-        <h3>⏳ Rendimiento</h3>
-        <p id="modalPerformance"></p>
+      <div class="details-section">
+        <h3>🌿 Perfil olfativo</h3>
+        <p id="modalProfile"></p>
       </div>
-      <div>
-        <h3>👤 Uso recomendado</h3>
-        <p id="modalUse"></p>
+
+      <div class="details-section">
+        <h3>✨ Acordes principales</h3>
+        <div class="accords" id="modalAccords"></div>
       </div>
+
+      <div class="details-section">
+        <h3>🧴 Notas destacadas</h3>
+        <ul id="modalNotes"></ul>
+      </div>
+
+      <div class="details-section">
+        <h3>☁️ Sensación general</h3>
+        <p id="modalFeeling"></p>
+      </div>
+
+      <div class="details-grid">
+        <div>
+          <h3>⏳ Rendimiento</h3>
+          <p id="modalPerformance"></p>
+        </div>
+
+        <div>
+          <h3>👤 Uso recomendado</h3>
+          <p id="modalUse"></p>
+        </div>
+      </div>
+
+      <button class="modal-copy-btn" id="modalCopyBtn" type="button">
+        Copiar nombre
+      </button>
+
+      <p class="detail-warning">
+        Rendimiento estimado: puede variar según piel, clima y cantidad aplicada.
+      </p>
     </div>
-
-    <button class="modal-copy-btn" id="modalCopyBtn" type="button">Copiar nombre</button>
-
-    <p class="detail-warning">
-      Rendimiento estimado: puede variar según piel, clima y cantidad aplicada.
-    </p>
   </div>
-</div>
 
-<div class="toast" id="toast">Nombre copiado</div>
+  <div class="toast" id="toast">Nombre copiado</div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

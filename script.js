@@ -430,12 +430,14 @@ let currentGender = "todos";
 let currentStyle = "todos";
 let currentModalProduct = null;
 let observer = null;
+let mobileShowAll = false;
 
 const productGrid = document.getElementById("productGrid");
 const featuredGrid = document.getElementById("featuredGrid");
 const searchInput = document.getElementById("searchInput");
 const noResults = document.getElementById("noResults");
 const productCount = document.getElementById("productCount");
+const mobileShowMoreBtn = document.getElementById("mobileShowMoreBtn");
 const toast = document.getElementById("toast");
 
 const detailsModal = document.getElementById("detailsModal");
@@ -485,16 +487,26 @@ function showToast(text){
 }
 
 function copyText(text){
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(text);
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        showToast("Nombre copiado 📩");
+      })
+      .catch(() => {
+        copyTextFallback(text);
+      });
   }else{
-    const temp = document.createElement("input");
-    temp.value = text;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand("copy");
-    document.body.removeChild(temp);
+    copyTextFallback(text);
   }
+}
+
+function copyTextFallback(text){
+  const temp = document.createElement("input");
+  temp.value = text;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand("copy");
+  document.body.removeChild(temp);
 
   showToast("Nombre copiado 📩");
 }
@@ -547,6 +559,7 @@ function renderProducts(){
     card.className = "card";
     card.dataset.gender = product.gender;
     card.dataset.styles = product.styles.join(" ");
+    card.dataset.name = product.name;
     card.dataset.search = getSearchText(product);
 
     card.innerHTML = `
@@ -631,21 +644,45 @@ function closeDetails(){
 function applyFilters(){
   const visibleProducts = getFilteredProducts();
   const visibleNames = visibleProducts.map(product => product.name);
-  let visibleCount = 0;
+
+  const isMobile = window.innerWidth <= 600;
+  const mobileLimit = 8;
+
+  let realMatchCount = 0;
+  let shownCount = 0;
 
   document.querySelectorAll(".card").forEach(card => {
-    const cardName = card.querySelector(".name").childNodes[0].textContent.trim();
+    const cardName = card.dataset.name;
+    const isMatch = visibleNames.includes(cardName);
 
-    if(visibleNames.includes(cardName)){
-      card.style.display = "block";
-      visibleCount++;
+    if(isMatch){
+      realMatchCount++;
+
+      if(isMobile && !mobileShowAll && shownCount >= mobileLimit){
+        card.style.display = "none";
+      }else{
+        card.style.display = "block";
+        shownCount++;
+      }
     }else{
       card.style.display = "none";
     }
   });
 
-  noResults.style.display = visibleCount === 0 ? "block" : "none";
-  productCount.innerText = `Mostrando ${visibleCount} de ${products.length} perfumes`;
+  noResults.style.display = realMatchCount === 0 ? "block" : "none";
+
+  if(isMobile && !mobileShowAll && realMatchCount > mobileLimit){
+    productCount.innerText = `Mostrando ${mobileLimit} de ${realMatchCount} perfumes`;
+    mobileShowMoreBtn.classList.add("visible");
+    mobileShowMoreBtn.innerText = "Ver todo";
+  }else if(isMobile && mobileShowAll && realMatchCount > mobileLimit){
+    productCount.innerText = `Mostrando ${realMatchCount} perfumes`;
+    mobileShowMoreBtn.classList.add("visible");
+    mobileShowMoreBtn.innerText = "Ver menos";
+  }else{
+    productCount.innerText = `Mostrando ${realMatchCount} de ${products.length} perfumes`;
+    mobileShowMoreBtn.classList.remove("visible");
+  }
 
   renderFeatured();
 }
@@ -655,6 +692,7 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     currentGender = btn.dataset.filter;
+    mobileShowAll = false;
     applyFilters();
   });
 });
@@ -664,11 +702,20 @@ document.querySelectorAll(".style-btn").forEach(btn => {
     document.querySelectorAll(".style-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     currentStyle = btn.dataset.style;
+    mobileShowAll = false;
     applyFilters();
   });
 });
 
-searchInput.addEventListener("input", applyFilters);
+searchInput.addEventListener("input", () => {
+  mobileShowAll = false;
+  applyFilters();
+});
+
+mobileShowMoreBtn.addEventListener("click", () => {
+  mobileShowAll = !mobileShowAll;
+  applyFilters();
+});
 
 document.getElementById("closeBannerBtn").addEventListener("click", () => {
   document.getElementById("infoBanner").style.display = "none";
@@ -696,6 +743,16 @@ window.addEventListener("scroll", () => {
 
 topBtn.addEventListener("click", () => {
   window.scrollTo({top:0, behavior:"smooth"});
+});
+
+window.addEventListener("resize", () => {
+  if(window.innerWidth > 600){
+    mobileShowAll = true;
+  }else{
+    mobileShowAll = false;
+  }
+
+  applyFilters();
 });
 
 function setupScrollAnimations(){
@@ -758,5 +815,4 @@ document.getElementById("recommendBtn").addEventListener("click", () => {
   });
 });
 
-renderFeatured();
 renderProducts();
