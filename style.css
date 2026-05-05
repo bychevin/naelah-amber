@@ -1892,3 +1892,136 @@ padding:8px 6px !important;
 grid-template-columns:1fr !important;
 }
 }
+
+
+header{
+padding:18px 24px !important;
+}
+
+.nav{
+max-width:1250px !important;
+display:grid !important;
+grid-template-columns:auto 1fr !important;
+align-items:center !important;
+gap:28px !important;
+}
+
+.brand-corner{
+display:flex !important;
+align-items:center !important;
+gap:18px !important;
+min-width:max-content !important;
+}
+
+.corner-logo{
+width:92px !important;
+height:92px !important;
+object-fit:cover !important;
+border-radius:50% !important;
+border:2px solid rgba(212,175,55,.85) !important;
+background:#050505 !important;
+padding:4px !important;
+box-shadow:
+0 0 22px rgba(212,175,55,.65),
+0 0 50px rgba(212,175,55,.22),
+0 0 80px rgba(0,0,0,.75) !important;
+transition:.3s ease !important;
+}
+
+.corner-logo:hover{
+transform:scale(1.05) rotate(-2deg) !important;
+box-shadow:
+0 0 28px rgba(212,175,55,.85),
+0 0 65px rgba(212,175,55,.28) !important;
+}
+
+.brand-corner .logo{
+font-size:44px !important;
+line-height:1 !important;
+letter-spacing:.5px !important;
+}
+
+.search{
+width:100% !important;
+}
+
+.search input{
+height:52px !important;
+font-size:15px !important;
+}
+
+/* Tablet */
+@media(max-width:900px){
+
+.nav{
+grid-template-columns:1fr !important;
+gap:16px !important;
+}
+
+.brand-corner{
+justify-content:center !important;
+}
+
+.corner-logo{
+width:82px !important;
+height:82px !important;
+}
+
+.brand-corner .logo{
+font-size:38px !important;
+text-align:center !important;
+}
+
+}
+
+/* Celular */
+@media(max-width:600px){
+
+header{
+padding:16px 14px !important;
+}
+
+.nav{
+display:flex !important;
+flex-direction:column !important;
+align-items:stretch !important;
+gap:14px !important;
+}
+
+.brand-corner{
+justify-content:center !important;
+gap:12px !important;
+}
+
+.corner-logo{
+width:72px !important;
+height:72px !important;
+padding:3px !important;
+}
+
+.brand-corner .logo{
+font-size:31px !important;
+text-align:left !important;
+white-space:normal !important;
+}
+
+.search input{
+height:50px !important;
+font-size:15px !important;
+}
+
+}
+
+/* Celular chico */
+@media(max-width:380px){
+
+.corner-logo{
+width:62px !important;
+height:62px !important;
+}
+
+.brand-corner .logo{
+font-size:27px !important;
+}
+
+}
