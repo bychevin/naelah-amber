@@ -842,7 +842,7 @@ document.getElementById("recommendBtn").addEventListener("click", () => {
 
 renderProducts();
 
-renderProducts(); function trackVisit(){
+function trackVisit(){
   const alreadyTracked = sessionStorage.getItem("naelahVisitTracked");
 
   if(alreadyTracked === "true"){
