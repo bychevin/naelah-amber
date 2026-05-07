@@ -653,7 +653,7 @@ function renderProducts(){
     const index = products.indexOf(product);
 
     const card = document.createElement("div");
-    card.className = "card";
+    card.className = "card show";
     card.dataset.gender = product.gender;
     card.dataset.styles = product.styles.join(" ");
     card.dataset.name = product.name;
@@ -885,9 +885,7 @@ mobileShowMoreBtn.addEventListener("click", () => {
   applyFilters();
 });
 
-document.getElementById("closeBannerBtn").addEventListener("click", () => {
-  document.getElementById("infoBanner").style.display = "none";
-});
+
 
 document.getElementById("closeModalBtn").addEventListener("click", closeDetails);
 
@@ -1026,3 +1024,7 @@ function trackVisit(){
 }
 
 trackVisit();
+
+renderProducts();
+renderFeatured();
+renderFavorites();
