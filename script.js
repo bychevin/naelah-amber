@@ -653,7 +653,7 @@ function renderProducts(){
     const index = products.indexOf(product);
 
     const card = document.createElement("div");
-    card.className = "card show";
+    card.className = "card";
     card.dataset.gender = product.gender;
     card.dataset.styles = product.styles.join(" ");
     card.dataset.name = product.name;
