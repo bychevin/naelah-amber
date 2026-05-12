@@ -718,9 +718,14 @@ mobileShowMoreBtn.addEventListener("click", () => {
   applyFilters();
 });
 
-document.getElementById("closeBannerBtn").addEventListener("click", () => {
-  document.getElementById("infoBanner").style.display = "none";
-});
+const closeBannerBtn = document.getElementById("closeBannerBtn");
+const infoBanner = document.getElementById("infoBanner");
+
+if(closeBannerBtn && infoBanner){
+  closeBannerBtn.addEventListener("click", () => {
+    infoBanner.style.display = "none";
+  });
+}
 
 document.getElementById("closeModalBtn").addEventListener("click", closeDetails);
 
