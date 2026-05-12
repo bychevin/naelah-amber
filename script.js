@@ -823,3 +823,286 @@ document.getElementById("recommendBtn").addEventListener("click", () => {
 });
 
 renderProducts();
+
+
+(function(){
+
+  const NAELAH_WHATSAPP = "5491158999373";
+  const CART_KEY = "naelahCart";
+
+  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+  function saveCart(){
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
+
+  function getProductByName(name){
+    return products.find(product => product.name === name);
+  }
+
+  function getPriceNumber(priceText){
+    const match = String(priceText).replace(",", ".").match(/\d+(\.\d+)?/);
+    return match ? Number(match[0]) : 0;
+  }
+
+  function getWhatsappProductLink(product){
+    const message = `Hola, quiero consultar por ${product.name} de Naelah Amber`;
+    return `https://wa.me/${NAELAH_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  }
+
+  function createCartUI(){
+    if(!document.getElementById("cartSidebar")){
+      const sidebar = document.createElement("div");
+      sidebar.className = "cart-sidebar";
+      sidebar.id = "cartSidebar";
+
+      sidebar.innerHTML = `
+        <div class="cart-header">
+          <h2>Mi carrito</h2>
+          <button type="button" class="close-cart-btn" id="closeCartBtn">×</button>
+        </div>
+
+        <div class="cart-items" id="cartItems"></div>
+
+        <div class="cart-footer">
+          <strong id="cartTotal">Total: 0 USD</strong>
+          <button type="button" id="checkoutBtn">Finalizar pedido</button>
+        </div>
+      `;
+
+      document.body.appendChild(sidebar);
+    }
+
+    if(!document.getElementById("floatingCartBtn")){
+      const btn = document.createElement("button");
+      btn.className = "floating-cart-btn";
+      btn.id = "floatingCartBtn";
+      btn.type = "button";
+      btn.innerHTML = `🛒 <span id="cartCount">0</span>`;
+
+      document.body.appendChild(btn);
+    }
+  }
+
+  function updateCartCount(){
+    const cartCount = document.getElementById("cartCount");
+
+    if(!cartCount) return;
+
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    cartCount.innerText = totalItems;
+  }
+
+  function addToCart(product){
+    const existing = cart.find(item => item.name === product.name);
+
+    if(existing){
+      existing.quantity += 1;
+    }else{
+      cart.push({
+        name: product.name,
+        brand: product.brand,
+        price: product.price,
+        img: product.img,
+        ml: product.ml,
+        quantity: 1
+      });
+    }
+
+    saveCart();
+    renderCart();
+    showToast(`${product.name} agregado al carrito 🛒`);
+  }
+
+  function removeFromCart(name){
+    cart = cart.filter(item => item.name !== name);
+    saveCart();
+    renderCart();
+  }
+
+  function changeQuantity(name, amount){
+    const item = cart.find(product => product.name === name);
+
+    if(!item) return;
+
+    item.quantity += amount;
+
+    if(item.quantity <= 0){
+      removeFromCart(name);
+      return;
+    }
+
+    saveCart();
+    renderCart();
+  }
+
+  function renderCart(){
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+
+    if(!cartItems || !cartTotal) return;
+
+    cartItems.innerHTML = "";
+
+    if(cart.length === 0){
+      cartItems.innerHTML = `
+        <div class="cart-empty">
+          Todavía no agregaste perfumes.
+        </div>
+      `;
+
+      cartTotal.innerText = "Total: 0 USD";
+      updateCartCount();
+      return;
+    }
+
+    let total = 0;
+
+    cart.forEach(item => {
+      const itemTotal = getPriceNumber(item.price) * item.quantity;
+      total += itemTotal;
+
+      const div = document.createElement("div");
+      div.className = "cart-item";
+
+      div.innerHTML = `
+        <img src="img/${item.img}" alt="${item.name}">
+
+        <div class="cart-item-info">
+          <strong>${item.name}</strong>
+          <span>${item.price} · ${item.ml}</span>
+
+          <div class="cart-qty">
+            <button type="button" class="qty-btn" data-name="${item.name}" data-action="minus">−</button>
+            <small>${item.quantity}</small>
+            <button type="button" class="qty-btn" data-name="${item.name}" data-action="plus">+</button>
+          </div>
+        </div>
+
+        <button type="button" class="remove-cart-btn" data-name="${item.name}">
+          ×
+        </button>
+      `;
+
+      cartItems.appendChild(div);
+    });
+
+    cartTotal.innerText = `Total aprox: ${total.toFixed(1)} USD`;
+
+    document.querySelectorAll(".remove-cart-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        removeFromCart(btn.dataset.name);
+      });
+    });
+
+    document.querySelectorAll(".qty-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const amount = btn.dataset.action === "plus" ? 1 : -1;
+        changeQuantity(btn.dataset.name, amount);
+      });
+    });
+
+    updateCartCount();
+  }
+
+  function openCart(){
+    const cartSidebar = document.getElementById("cartSidebar");
+    if(cartSidebar) cartSidebar.classList.add("active");
+  }
+
+  function closeCart(){
+    const cartSidebar = document.getElementById("cartSidebar");
+    if(cartSidebar) cartSidebar.classList.remove("active");
+  }
+
+  function checkoutCart(){
+    if(cart.length === 0){
+      showToast("El carrito está vacío");
+      return;
+    }
+
+    const productsText = cart.map(item => {
+      return `• ${item.name} x${item.quantity} - ${item.price}`;
+    }).join("\n");
+
+    const total = cart.reduce((sum, item) => {
+      return sum + getPriceNumber(item.price) * item.quantity;
+    }, 0);
+
+    const message = 
+`Hola, quiero hacer este pedido en Naelah Amber:
+
+${productsText}
+
+Total aprox: ${total.toFixed(1)} USD
+
+¿Me confirmás stock, precio y entrega?`;
+
+    const url = `https://wa.me/${NAELAH_WHATSAPP}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+
+  function enhanceCards(){
+    document.querySelectorAll(".card").forEach(card => {
+      if(card.dataset.enhanced === "true") return;
+
+      const product = getProductByName(card.dataset.name);
+      const actions = card.querySelector(".card-actions");
+
+      if(!product || !actions) return;
+
+      const consultBtn = document.createElement("a");
+      consultBtn.className = "consult-btn";
+      consultBtn.href = getWhatsappProductLink(product);
+      consultBtn.target = "_blank";
+      consultBtn.rel = "noopener noreferrer";
+      consultBtn.innerText = "Consultar";
+
+      const addBtn = document.createElement("button");
+      addBtn.className = "add-cart-btn";
+      addBtn.type = "button";
+      addBtn.innerText = "Agregar al carrito";
+
+      addBtn.addEventListener("click", () => {
+        addToCart(product);
+        openCart();
+      });
+
+      const copyBtn = actions.querySelector(".copy-name-btn");
+
+      if(copyBtn){
+        actions.insertBefore(consultBtn, copyBtn);
+        actions.insertBefore(addBtn, copyBtn);
+      }else{
+        actions.appendChild(consultBtn);
+        actions.appendChild(addBtn);
+      }
+
+      card.dataset.enhanced = "true";
+    });
+  }
+
+  function setupCartEvents(){
+    const floatingCartBtn = document.getElementById("floatingCartBtn");
+    const closeCartBtn = document.getElementById("closeCartBtn");
+    const checkoutBtn = document.getElementById("checkoutBtn");
+
+    if(floatingCartBtn){
+      floatingCartBtn.addEventListener("click", openCart);
+    }
+
+    if(closeCartBtn){
+      closeCartBtn.addEventListener("click", closeCart);
+    }
+
+    if(checkoutBtn){
+      checkoutBtn.addEventListener("click", checkoutCart);
+    }
+  }
+
+  createCartUI();
+  enhanceCards();
+  renderCart();
+  setupCartEvents();
+
+})();
