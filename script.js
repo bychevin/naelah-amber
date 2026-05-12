@@ -428,25 +428,18 @@ const products = [
 
 let currentGender = "todos";
 let currentStyle = "todos";
-let currentSort = "default";
 let currentModalProduct = null;
 let observer = null;
-
-let mobileShowAll = sessionStorage.getItem("naelahMobileShowAll") === "true";
-const mobileQuery = window.matchMedia("(max-width: 600px)");
-
-const WHATSAPP_NUMBER = "5491158999373";
+let mobileShowAll = false;
+let wasMobile = window.innerWidth <= 600;
 
 const productGrid = document.getElementById("productGrid");
 const featuredGrid = document.getElementById("featuredGrid");
-const favoritesGrid = document.getElementById("favoritesGrid");
-const favoritesSection = document.getElementById("favoritesSection");
 const searchInput = document.getElementById("searchInput");
 const noResults = document.getElementById("noResults");
 const productCount = document.getElementById("productCount");
 const mobileShowMoreBtn = document.getElementById("mobileShowMoreBtn");
 const toast = document.getElementById("toast");
-const sortButtons = document.querySelectorAll(".sort-btn");
 
 const detailsModal = document.getElementById("detailsModal");
 const modalImg = document.getElementById("modalImg");
@@ -462,7 +455,6 @@ const modalFeeling = document.getElementById("modalFeeling");
 const modalPerformance = document.getElementById("modalPerformance");
 const modalUse = document.getElementById("modalUse");
 const modalCopyBtn = document.getElementById("modalCopyBtn");
-const modalWhatsappBtn = document.getElementById("modalWhatsappBtn");
 
 function genderLabel(gender){
   if(gender === "masculino") return "Masculino";
@@ -470,72 +462,8 @@ function genderLabel(gender){
   return "Unisex";
 }
 
-function getUsdNumber(priceText){
-  const match = String(priceText).replace(",", ".").match(/\d+(\.\d+)?/);
-  return match ? Number(match[0]) : 0;
-}
-
 function getSearchText(product){
   return `${product.name} ${product.brand} ${product.gender} ${product.profile} ${product.accords.join(" ")} ${product.styles.join(" ")} ${product.badge}`.toLowerCase();
-}
-
-function getWhatsappLink(product){
-  const message = `Hola, quiero consultar por ${product.name} de Naelah Amber`;
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
-
-function getCommercialLabel(product){
-  if(product.featured) return "Recomendado";
-  if(product.styles.includes("gourmand")) return "Ideal regalo";
-  if(product.styles.includes("noche")) return "Para salir";
-  if(product.styles.includes("diario")) return "Uso diario";
-  return "Consultar stock";
-}
-
-function getFavorites(){
-  try{
-    return JSON.parse(localStorage.getItem("naelahFavorites")) || [];
-  }catch{
-    return [];
-  }
-}
-
-function saveFavorites(favorites){
-  localStorage.setItem("naelahFavorites", JSON.stringify(favorites));
-}
-
-function isFavorite(productName){
-  return getFavorites().includes(productName);
-}
-
-function toggleFavorite(productName){
-  let favorites = getFavorites();
-
-  if(favorites.includes(productName)){
-    favorites = favorites.filter(name => name !== productName);
-    showToast("Quitado de favoritos");
-  }else{
-    favorites.push(productName);
-    showToast("Agregado a favoritos ♡");
-  }
-
-  saveFavorites(favorites);
-  updateFavoriteButtons();
-  renderFavorites();
-}
-
-function updateFavoriteButtons(){
-  document.querySelectorAll(".favorite-btn").forEach(btn => {
-    const name = btn.dataset.name;
-
-    if(isFavorite(name)){
-      btn.classList.add("active");
-      btn.innerText = "♥";
-    }else{
-      btn.classList.remove("active");
-      btn.innerText = "♡";
-    }
-  });
 }
 
 function getFilteredProducts(){
@@ -550,32 +478,6 @@ function getFilteredProducts(){
   });
 }
 
-function getSortedProducts(productList){
-  const sorted = [...productList];
-
-  if(currentSort === "price-asc"){
-    sorted.sort((a,b) => getUsdNumber(a.price) - getUsdNumber(b.price));
-  }
-
-  if(currentSort === "price-desc"){
-    sorted.sort((a,b) => getUsdNumber(b.price) - getUsdNumber(a.price));
-  }
-
-  if(currentSort === "name-asc"){
-    sorted.sort((a,b) => a.name.localeCompare(b.name));
-  }
-
-  if(currentSort === "default"){
-    sorted.sort((a,b) => {
-      if(a.featured && !b.featured) return -1;
-      if(!a.featured && b.featured) return 1;
-      return products.indexOf(a) - products.indexOf(b);
-    });
-  }
-
-  return sorted;
-}
-
 function showToast(text){
   toast.innerText = text;
   toast.classList.add("show");
@@ -588,8 +490,12 @@ function showToast(text){
 function copyText(text){
   if(navigator.clipboard && window.isSecureContext){
     navigator.clipboard.writeText(text)
-      .then(() => showToast("Nombre copiado 📩"))
-      .catch(() => copyTextFallback(text));
+      .then(() => {
+        showToast("Nombre copiado 📩");
+      })
+      .catch(() => {
+        copyTextFallback(text);
+      });
   }else{
     copyTextFallback(text);
   }
@@ -628,6 +534,8 @@ function renderFeatured(){
   }
 
   featuredProducts.forEach(product => {
+    const index = products.indexOf(product);
+
     const card = document.createElement("div");
     card.className = "featured-card";
     card.innerHTML = `
@@ -639,7 +547,7 @@ function renderFeatured(){
       </div>
     `;
 
-    card.addEventListener("click", () => openDetails(product));
+    card.addEventListener("click", () => openDetails(products[index]));
     featuredGrid.appendChild(card);
   });
 }
@@ -647,11 +555,7 @@ function renderFeatured(){
 function renderProducts(){
   productGrid.innerHTML = "";
 
-  const sortedProducts = getSortedProducts(products);
-
-  sortedProducts.forEach((product) => {
-    const index = products.indexOf(product);
-
+  products.forEach((product, index) => {
     const card = document.createElement("div");
     card.className = "card";
     card.dataset.gender = product.gender;
@@ -660,27 +564,19 @@ function renderProducts(){
     card.dataset.search = getSearchText(product);
 
     card.innerHTML = `
-  <div class="product-image-wrap">
-    <div class="card-top">
-      <span class="badge">${product.badge}</span>
-      <span class="ml-card">${product.ml}</span>
-    </div>
+      <div class="card-top">
+        <span class="badge">${product.badge}</span>
+        <span class="ml-card">${product.ml}</span>
+      </div>
 
-    <img src="img/${product.img}" alt="${product.name}">
+      <img src="img/${product.img}" alt="${product.name}">
 
-    <button class="favorite-btn ${isFavorite(product.name) ? "active" : ""}" type="button" data-name="${product.name}">
-      ${isFavorite(product.name) ? "♥" : "♡"}
-    </button>
-  </div>
-
-  <div class="brand">${product.brand}</div>
+      <div class="brand">${product.brand}</div>
 
       <div class="name">
         ${product.name}
         <span class="tag ${product.gender}">${genderLabel(product.gender)}</span>
       </div>
-
-      <div class="commercial-label">${getCommercialLabel(product)}</div>
 
       <div class="card-style-line">
         ${product.styles.slice(0,3).map(style => `<span>${style}</span>`).join("")}
@@ -690,9 +586,6 @@ function renderProducts(){
 
       <div class="card-actions">
         <button class="detail-btn" type="button" data-index="${index}">Ver detalles</button>
-        <a class="consult-btn" href="${getWhatsappLink(product)}" target="_blank" rel="noopener noreferrer">
-          Consultar
-        </a>
         <button class="copy-name-btn" type="button" data-name="${product.name}">Copiar nombre</button>
       </div>
     `;
@@ -701,58 +594,19 @@ function renderProducts(){
   });
 
   document.querySelectorAll(".detail-btn").forEach(btn => {
-    btn.addEventListener("click", () => openDetails(products[btn.dataset.index]));
+    btn.addEventListener("click", () => {
+      openDetails(products[btn.dataset.index]);
+    });
   });
 
   document.querySelectorAll(".copy-name-btn").forEach(btn => {
-    btn.addEventListener("click", () => copyText(btn.dataset.name));
-  });
-
-  document.querySelectorAll(".favorite-btn").forEach(btn => {
-    btn.addEventListener("click", () => toggleFavorite(btn.dataset.name));
+    btn.addEventListener("click", () => {
+      copyText(btn.dataset.name);
+    });
   });
 
   setupScrollAnimations();
   applyFilters();
-  renderFavorites();
-}
-
-function renderFavorites(){
-  if(!favoritesGrid || !favoritesSection) return;
-
-  const favorites = getFavorites();
-  const favoriteProducts = products.filter(product => favorites.includes(product.name));
-
-  favoritesGrid.innerHTML = "";
-
-  if(favoriteProducts.length === 0){
-    favoritesSection.style.display = "none";
-    return;
-  }
-
-  favoritesSection.style.display = "block";
-
-  favoriteProducts.forEach(product => {
-    const card = document.createElement("div");
-    card.className = "favorite-card";
-
-    card.innerHTML = `
-      <img src="img/${product.img}" alt="${product.name}">
-      <div>
-        <small>${product.brand}</small>
-        <h3>${product.name}</h3>
-        <p>${product.price} · ${product.ml}</p>
-      </div>
-
-      <div class="favorite-card-actions">
-        <button type="button" class="small-detail-btn">Ver</button>
-        <a href="${getWhatsappLink(product)}" target="_blank" rel="noopener noreferrer">Consultar</a>
-      </div>
-    `;
-
-    card.querySelector(".small-detail-btn").addEventListener("click", () => openDetails(product));
-    favoritesGrid.appendChild(card);
-  });
 }
 
 function openDetails(product){
@@ -770,10 +624,6 @@ function openDetails(product){
   modalFeeling.innerText = product.feeling;
   modalPerformance.innerText = product.performance;
   modalUse.innerText = product.use;
-
-  if(modalWhatsappBtn){
-    modalWhatsappBtn.href = getWhatsappLink(product);
-  }
 
   modalAccords.innerHTML = "";
   product.accords.forEach(accord => {
@@ -793,10 +643,10 @@ function closeDetails(){
 }
 
 function applyFilters(){
-  const visibleProducts = getSortedProducts(getFilteredProducts());
+  const visibleProducts = getFilteredProducts();
   const visibleNames = visibleProducts.map(product => product.name);
 
-  const isMobile = mobileQuery.matches;
+  const isMobile = window.innerWidth <= 600;
   const mobileLimit = 8;
 
   let realMatchCount = 0;
@@ -826,6 +676,10 @@ function applyFilters(){
     productCount.innerText = `Mostrando ${mobileLimit} de ${realMatchCount} perfumes`;
     mobileShowMoreBtn.classList.add("visible");
     mobileShowMoreBtn.innerText = "Ver todo";
+  }else if(isMobile && mobileShowAll && realMatchCount > mobileLimit){
+    productCount.innerText = `Mostrando ${realMatchCount} perfumes`;
+    mobileShowMoreBtn.classList.add("visible");
+    mobileShowMoreBtn.innerText = "Ver menos";
   }else{
     productCount.innerText = `Mostrando ${realMatchCount} de ${products.length} perfumes`;
     mobileShowMoreBtn.classList.remove("visible");
@@ -838,11 +692,8 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-
     currentGender = btn.dataset.filter;
     mobileShowAll = false;
-    sessionStorage.removeItem("naelahMobileShowAll");
-
     applyFilters();
   });
 });
@@ -851,41 +702,25 @@ document.querySelectorAll(".style-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".style-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-
     currentStyle = btn.dataset.style;
     mobileShowAll = false;
-    sessionStorage.removeItem("naelahMobileShowAll");
-
     applyFilters();
-  });
-});
-
-sortButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    sortButtons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    currentSort = btn.dataset.sort;
-    mobileShowAll = false;
-    sessionStorage.removeItem("naelahMobileShowAll");
-
-    renderProducts();
   });
 });
 
 searchInput.addEventListener("input", () => {
   mobileShowAll = false;
-  sessionStorage.removeItem("naelahMobileShowAll");
   applyFilters();
 });
 
 mobileShowMoreBtn.addEventListener("click", () => {
-  mobileShowAll = true;
-  sessionStorage.setItem("naelahMobileShowAll", "true");
+  mobileShowAll = !mobileShowAll;
   applyFilters();
 });
 
-
+document.getElementById("closeBannerBtn").addEventListener("click", () => {
+  document.getElementById("infoBanner").style.display = "none";
+});
 
 document.getElementById("closeModalBtn").addEventListener("click", closeDetails);
 
@@ -911,22 +746,15 @@ topBtn.addEventListener("click", () => {
   window.scrollTo({top:0, behavior:"smooth"});
 });
 
-function handleMobileModeChange(){
-  mobileShowAll = false;
-  sessionStorage.removeItem("naelahMobileShowAll");
+window.addEventListener("resize", () => {
+  const isMobile = window.innerWidth <= 600;
+
+  if(isMobile !== wasMobile){
+    mobileShowAll = false;
+    wasMobile = isMobile;
+  }
+
   applyFilters();
-}
-
-if(typeof mobileQuery.addEventListener === "function"){
-  mobileQuery.addEventListener("change", handleMobileModeChange);
-}else if(typeof mobileQuery.addListener === "function"){
-  mobileQuery.addListener(handleMobileModeChange);
-}
-
-window.addEventListener("orientationchange", () => {
-  setTimeout(() => {
-    applyFilters();
-  }, 400);
 });
 
 function setupScrollAnimations(){
@@ -934,9 +762,7 @@ function setupScrollAnimations(){
     observer.disconnect();
   }
 
-  const animatedElements = document.querySelectorAll(
-    ".card, .how-to-buy, .featured-section, .recommend-box, .contact-section, .trust-section, .favorites-section"
-  );
+  const animatedElements = document.querySelectorAll(".card, .how-to-buy, .featured-section, .recommend-box");
 
   observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -984,47 +810,11 @@ document.getElementById("recommendBtn").addEventListener("click", () => {
       <strong>${product.name}</strong>
       <span>${product.price} · ${product.ml}</span>
       <p>${product.badge} · ${product.styles.slice(0,3).join(" · ")}</p>
-      <a class="quiz-consult-btn" href="${getWhatsappLink(product)}" target="_blank" rel="noopener noreferrer">
-        Consultar este
-      </a>
     `;
 
-    div.addEventListener("click", (e) => {
-      if(e.target.tagName.toLowerCase() === "a") return;
-      openDetails(product);
-    });
-
+    div.addEventListener("click", () => openDetails(product));
     results.appendChild(div);
   });
 });
 
 renderProducts();
-
-function trackVisit(){
-  const alreadyTracked = sessionStorage.getItem("naelahVisitTracked");
-
-  if(alreadyTracked === "true"){
-    return;
-  }
-
-  sessionStorage.setItem("naelahVisitTracked", "true");
-
-  fetch("https://naelah-api.vercel.app/api/visit", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      page: window.location.href,
-      referrer: document.referrer || null,
-      device_width: window.innerWidth,
-      device_height: window.innerHeight
-    })
-  }).catch(() => {});
-}
-
-trackVisit();
-
-renderProducts();
-renderFeatured();
-renderFavorites();
