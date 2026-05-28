@@ -2167,3 +2167,32 @@ Total aprox: ${total.toFixed(1)} USD
   setupCartEvents();
 
 })();
+
+(async function trackVisit(){
+  try{
+    const SUPABASE_URL = "https://ilzcrfoszbiobmdygcqs.supabase.co/rest/v1/visits";
+    const SUPABASE_ANON_KEY = "sb_publishable_IzZPgm8PozXBiYe67MI1Fw_d3jQFBZI";
+
+    const ipRes = await fetch("https://ipapi.co/json/");
+    const data = await ipRes.json();
+
+    await fetch(`${SUPABASE_URL}/rest/v1/visits`, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({
+        ip: data.ip || null,
+        country: data.country_code || null,
+        region: data.region_code || null,
+        city: data.city || null,
+        user_agent: navigator.userAgent
+      })
+    });
+  }catch(error){
+    console.log("Error guardando visita:", error);
+  }
+})();
