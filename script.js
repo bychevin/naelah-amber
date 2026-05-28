@@ -2170,19 +2170,19 @@ Total aprox: ${total.toFixed(1)} USD
 
 (async function trackVisit(){
   try{
-    const SUPABASE_URL = "https://ilzcrfoszbiobmdygcqs.supabase.co/rest/v1/visits";
+    const SUPABASE_URL = "https://ilzcrfoszbiobmdygcqs.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_IzZPgm8PozXBiYe67MI1Fw_d3jQFBZI";
 
     const ipRes = await fetch("https://ipapi.co/json/");
     const data = await ipRes.json();
 
-    await fetch(`${SUPABASE_URL}/rest/v1/visits`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/visits`, {
       method: "POST",
       headers: {
         "apikey": SUPABASE_ANON_KEY,
         "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
         "Content-Type": "application/json",
-        "Prefer": "return=minimal"
+        "Prefer": "return=representation"
       },
       body: JSON.stringify({
         ip: data.ip || null,
@@ -2192,7 +2192,13 @@ Total aprox: ${total.toFixed(1)} USD
         user_agent: navigator.userAgent
       })
     });
+
+    const result = await res.text();
+
+    console.log("STATUS VISITA:", res.status);
+    console.log("RESPUESTA SUPABASE:", result);
+
   }catch(error){
-    console.log("Error guardando visita:", error);
+    console.log("ERROR GENERAL:", error);
   }
 })();
