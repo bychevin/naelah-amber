@@ -2171,7 +2171,8 @@ Total aprox: ${total.toFixed(1)} USD
 (async function trackVisit(){
   try{
     const SUPABASE_URL = "https://ilzcrfoszbiobmdygcqs.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_IzZPgm8PozXBiYe67MI1Fw_d3jQFBZI";
+
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlsemNyZm9zemJpb2JtZHlnY3FzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5Nzc4NjQsImV4cCI6MjA5MzU1Mzg2NH0.3_suOQDgKzIOmKE0kWyJ7HCKabC8JU9hT-90wjMs-Bg";
 
     const ipRes = await fetch("https://ipapi.co/json/");
     const data = await ipRes.json();
@@ -2202,4 +2203,3 @@ Total aprox: ${total.toFixed(1)} USD
     console.log("ERROR GENERAL:", error);
   }
 })();
-
