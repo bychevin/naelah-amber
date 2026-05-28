@@ -2202,3 +2202,4 @@ Total aprox: ${total.toFixed(1)} USD
     console.log("ERROR GENERAL:", error);
   }
 })();
+
