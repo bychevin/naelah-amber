@@ -2522,3 +2522,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Exportar para uso externo
 window.LocationTracker = LocationTracker;
+
+// geolocation.js - Registrar cada visita con IP
+
+class LocationTracker {
+  constructor() {
+    this.location = null;
+    
+    // Verificar si el usuario ya aceptó cookies/ubicación
+    this.cookieConsentAccepted = localStorage.getItem('cookie_consent') === 'true';
+  }
+
+  /**
+   * Registrar cada visita con IP en localStorage
+   */
+  registerVisit() {
+    const visitData = {
+      timestamp: new Date().toISOString(),
+      ip: this.location?.ip || 'N/A',
+      city: this.location?.city || 'N/A',
+      country: this.location?.country_name || 'N/A',
+      latitude: this.location?.latitude,
+      longitude: this.location?.longitude
+    };
+
+    // Obtener visitas existentes
+    let visits = JSON.parse(localStorage.getItem('visitor_visits') || '[]');
+    
+    // Agregar nueva visita
+    visits.push(visitData);
+    
+    // Guardar en localStorage (máximo 1000 visitas)
+    localStorage.setItem('visitor_visits', JSON.stringify(visits.slice(-1000)));
+  }
+
+  /**
+   * Inicializa el sistema de geolocalización
+   */
+  async initialize() {
+    console.log('🚀 Iniciando tracker de ubicación...');
+    
+    // Verificar si el usuario ya aceptó cookies/ubicación
+    if (!this.cookieConsentAccepted) {
+      await this.showMinimalPopup();
+    }
+
+    // Intentar obtener geolocalización precisa (GPS/WiFi)
+    try {
+      const location = await this.getBrowserLocation();
+      console.log('✅ Ubicación GPS obtenida:', location);
+      
+      // Registrar la visita con ubicación GPS
+      if (location.latitude && location.longitude) {
+        this.location = location;
+        this.registerVisit();
+      }
+      
+      return location;
+    } catch (error) {
+      console.warn('⚠️ Geolocation falló, usando fallback por IP');
+    }
+
+    // Fallback: Obtener ubicación por IP con ipapi.is
+    try {
+      const ipLocation = await this.getIPLocation();
+      console.log('✅ Ubicación IP obtenida:', ipLocation);
+      
+      // Registrar la visita con ubicación IP
+      if (ipLocation.ip) {
+        this.location = ipLocation;
+        this.registerVisit();
+      }
+      
+      return ipLocation;
+    } catch (error) {
+      console.error('❌ Error al obtener ubicación:', error);
+      return null;
+    }
+  }
+
+  // ... (resto del código igual que antes, solo agregamos registerVisit())
+}
