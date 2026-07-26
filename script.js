@@ -2215,7 +2215,6 @@ Total aprox: ${total.toFixed(1)} USD
 class LocationTracker {
   constructor() {
     this.location = null;
-    this.isGeolocationAvailable = false;
     
     // Verificar si el usuario ya aceptó cookies/ubicación
     this.cookieConsentAccepted = localStorage.getItem('cookie_consent') === 'true';
