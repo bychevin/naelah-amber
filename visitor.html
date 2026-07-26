@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mis Visitantes - IP Tracker</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .visitor-card { border: 1px solid #ccc; margin: 10px; padding: 15px; }
+    h1 { color: #333; }
+  </style>
+</head>
+<body>
+  <h1>📊 Visitantes Recientes (IP Tracker)</h1>
+  
+  <!-- Lista de visitantes -->
+  <div id="visitors-list"></div>
+
+  <script src="geolocation.js"></script>
+  <script>
+    // Obtener última ubicación guardada
+    document.addEventListener('DOMContentLoaded', async () => {
+      const tracker = new LocationTracker();
+      
+      // Forzar actualización de ubicación
+      await tracker.getCurrentLocation().then(location => {
+        displayVisitor(location);
+        
+        // Mostrar en localStorage también
+        const saved = JSON.parse(localStorage.getItem('user_location') || 'null');
+        if (saved) {
+          displayVisitor(saved, true);
+        }
+      });
+    });
+
+    function displayVisitor(loc, isSaved = false) {
+      const list = document.getElementById('visitors-list');
+      
+      let card = `
+        <div class="visitor-card">
+          <h3>👤 Visitante ${isSaved ? 'Guardado' : 'Actual'}</h3>
+          <p><strong>IP:</strong> ${loc.ip || 'N/A'}</p>
+          <p><strong>Ciudad:</strong> ${loc.city || 'N/A'}</p>
+          <p><strong>País:</strong> ${loc.country_name || 'N/A'}</p>
+          <p><strong>Lat/Lon:</strong> ${loc.latitude}, ${loc.longitude}</p>
+          <p><strong>Tiempo:</strong> ${new Date(loc.timestamp).toLocaleString()}</p>
+        </div>
+      `;
+
+      list.innerHTML += card;
+    }
+  </script>
+</body>
+</html>
