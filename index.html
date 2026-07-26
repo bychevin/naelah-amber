@@ -369,27 +369,6 @@
     }
 </script>
 
-<!-- Popup de consentimiento para geolocalización -->
-<div id="location-consent" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999;">
-    <div style="background:white; padding:20px; max-width:400px; margin:50px auto; border-radius:8px;">
-        <h3>📍 Acceder a tu ubicación</h3>
-        <p>Necesitamos saber dónde estás para mostrarte contenido relevante.</p>
-        
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button onclick="acceptLocation()" style="flex:1; padding:15px; background:green; color:white; border:none; cursor:pointer;">
-                ✅ Aceptar ubicación
-            </button>
-            <button onclick="rejectLocation()" style="flex:1; padding:15px; background:red; color:white; border:none; cursor:pointer;">
-                ❌ Rechazar (usar IP)
-            </button>
-        </div>
-        
-        <p style="font-size:12px; margin-top:10px;">
-            Tu ubicación se usará para personalizar el contenido. Se guarda temporalmente en localStorage.
-        </p>
-    </div>
-</div>
-
 <script>
     // Mostrar popup después de 5 segundos o al cargar
     setTimeout(() => {
