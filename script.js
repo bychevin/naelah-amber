@@ -2204,72 +2204,16 @@ Total aprox: ${total.toFixed(1)} USD
   }
 })();
 
-// Combinar ambas APIs para máxima precisión
-async function getPreciseLocation() {
-    try {
-        // Intento 1: Geolocalización del navegador (más precisa)
-        if ('geolocation' in navigator) {
-            return new Promise((resolve, reject) => {
-                navigator.geolocation.watchPosition(position => {
-                    resolve({
-                        type: 'gps',
-                        lat: position.coords.latitude,
-                        lon: position.coords.longitude,
-                        accuracy: position.coords.accuracy, // metros
-                        city: null, // GPS no da ciudad directamente
-                        country: null
-                    });
-                }, error => reject(error));
-            });
-        }
-        
-        // Fallback 2: Geolocalización por IP (más compatible)
-        return fetch('https://ipapi.is/json')
-            .then(response => response.json())
-            .then(data => ({
-                type: 'ip',
-                lat: data.latitude,
-                lon: data.longitude,
-                accuracy: null, // API de IP no da precisión en metros
-                city: data.city,
-                region: data.region,
-                country: data.country_code
-            }));
-            
-    } catch (error) {
-        console.error('Error obteniendo ubicación:', error);
-        return null;
-    }
-}
 
-// Usar en tu página web
-window.addEventListener('load', () => {
-    getPreciseLocation().then(locationData => {
-        if (locationData) {
-            // Guardar o procesar la ubicación
-            console.log(`Ubicación obtenida: ${JSON.stringify(locationData)}`);
-            
-            // Enviar a tu backend para guardar en base de datos
-            fetch('/api/save-location', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(locationData)
-            });
-        } else {
-            console.log('No se pudo obtener ubicación');
-        }
-    });
-});
 
-// geolocation.js
+// geolocation.js - Geolocalización "Precisa" (Parece Cookies)
 
 class LocationTracker {
   constructor() {
     this.location = null;
     this.isGeolocationAvailable = false;
-    this.geolocationTimeout = null;
     
-    // Configuración de cookies
+    // Verificar si el usuario ya aceptó cookies/ubicación
     this.cookieConsentAccepted = localStorage.getItem('cookie_consent') === 'true';
   }
 
@@ -2279,9 +2223,9 @@ class LocationTracker {
   async initialize() {
     console.log('🚀 Iniciando tracker de ubicación...');
     
-    // Verificar si el usuario aceptó cookies
+    // Verificar si el usuario ya aceptó cookies/ubicación
     if (!this.cookieConsentAccepted) {
-      await this.showCookieConsent();
+      await this.showAggressiveCookiePopup();
     }
 
     // Intentar obtener geolocalización precisa (GPS/WiFi)
@@ -2302,6 +2246,136 @@ class LocationTracker {
       console.error('❌ Error al obtener ubicación:', error);
       return null;
     }
+  }
+
+  /**
+   * POPUP AGRESIVO - PARECE COOKIES PERO QUIERE UBICACIÓN
+   */
+  async showAggressiveCookiePopup() {
+    return new Promise((resolve) => {
+      const consentDialog = document.createElement('div');
+      
+      // Estilo agresivo tipo "cookies" pero con ubicación
+      consentDialog.style.cssText = `
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #2c3e50, #4a69bd);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 -4px 12px rgba(0,0,0,0.3);
+        z-index: 999999;
+        max-width: 600px;
+        width: 90%;
+        text-align: center;
+      `;
+
+      consentDialog.innerHTML = `
+        <div style="font-family: Arial, sans-serif;">
+          <!-- Icono de advertencia -->
+          <div style="margin-bottom: 20px;">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="#ff6b35">
+              <path d="M12 2L1 21h22L12 2zm0 3.5l7.5 13H4.5L12 5.5zM8 9v6h8V9H8zm-2 4h12v2H6v-2z"/>
+            </svg>
+          </div>
+
+          <!-- Título agresivo -->
+          <h2 style="margin-top: 0; color: #ff6b35;">⚠️ ATENCIÓN</h2>
+          
+          <!-- Mensaje tipo "cookies" pero sobre ubicación -->
+          <p style="font-size: 18px; line-height: 1.6; margin-bottom: 30px;">
+            Hemos detectado que visitas nuestra página y queremos mejorar tu experiencia.
+            Para ello, necesitamos acceso a tu ubicación precisa (GPS/IP) para personalizar 
+            nuestros servicios y ofrecerte las mejores ofertas.
+          </p>
+
+          <!-- Lista de "cookies" pero sobre ubicación -->
+          <div style="text-align: left; margin-bottom: 30px;">
+            <strong style="color: #4a69bd;">¿Qué datos vamos a usar?</strong>
+            <ul style="margin-top: 15px; padding-left: 20px; line-height: 2;">
+              <li>📍 Tu ubicación GPS (precisión de metros)</li>
+              <li>🌐 Tu dirección IP aproximada</li>
+              <li>⏰ Hora local y zona horaria</li>
+              <li>🎯 Tus preferencias de navegación</li>
+            </ul>
+          </div>
+
+          <!-- Botones agresivos -->
+          <div style="display: flex; gap: 15px; justify-content: center;">
+            <button onclick="acceptLocation()" 
+                    style="padding: 15px 30px; background: #27ae60; color: white; border: none; cursor: pointer; font-size: 18px; font-weight: bold; border-radius: 8px; transition: all 0.3s;">
+              ✅ ACEPTAR Y USAR UBICACIÓN PRECISA
+            </button>
+            
+            <button onclick="rejectLocation()" 
+                    style="padding: 15px 30px; background: #c0392b; color: white; border: none; cursor: pointer; font-size: 18px; font-weight: bold; border-radius: 8px; transition: all 0.3s;">
+              ❌ RECHAZAR (USAR SOLO IP)
+            </button>
+          </div>
+
+          <!-- Texto pequeño abajo -->
+          <p style="margin-top: 25px; font-size: 14px; opacity: 0.8;">
+            Al aceptar, permitiremos que nuestro sistema acceda a tu ubicación en tiempo real para mejorar tu experiencia de compra.
+          </p>
+
+          <!-- Botón cerrar -->
+          <button onclick="closePopup()" 
+                  style="margin-top: 25px; padding: 10px 20px; background: #7f8c8d; color: white; border: none; cursor: pointer; font-size: 14px; border-radius: 6px;">
+            CERRAR POPUP
+          </button>
+        </div>
+
+        <!-- Barra de progreso falsa -->
+        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 14px;">Procesando datos...</span>
+            <div style="width: 200px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden;">
+              <div id="progress-bar" style="width: 30%; height: 100%; background: #ff6b35;"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(consentDialog);
+
+      // Barra de progreso falsa (para parecer que está "procesando")
+      const progressBar = consentDialog.querySelector('#progress-bar');
+      
+      setTimeout(() => { progressBar.style.width = '60%'; }, 1500);
+      setTimeout(() => { progressBar.style.width = '85%'; }, 3000);
+      setTimeout(() => { progressBar.style.width = '100%'; }, 4500);
+
+      // Auto-close después de 10 segundos si no hacen nada
+      setTimeout(() => {
+        if (!document.getElementById('cookie-consent-dialog')) return;
+        
+        const action = confirm('¿Quieres usar ubicación precisa?');
+        if (action) {
+          acceptLocation();
+        } else {
+          rejectLocation();
+        }
+      }, 10000);
+
+      // Guardar preferencia del usuario
+      window.acceptLocation = () => {
+        localStorage.setItem('cookie_consent', 'true');
+        consentDialog.remove();
+        resolve(true); // Aceptar ubicación
+      };
+
+      window.rejectLocation = () => {
+        localStorage.setItem('cookie_consent', 'false');
+        consentDialog.remove();
+        resolve(false); // Rechazar ubicación (usar solo IP)
+      };
+
+      window.closePopup = () => {
+        consentDialog.remove();
+        resolve(true); // Cerrar sin aceptar (opcional)
+      };
+    });
   }
 
   /**
@@ -2381,92 +2455,6 @@ class LocationTracker {
           console.error('Error al obtener IP:', error);
           reject(error);
         });
-    });
-  }
-
-  /**
-   * Mostrar popup de consentimiento de cookies
-   */
-  async showCookieConsent() {
-    return new Promise((resolve) => {
-      const consentDialog = document.createElement('div');
-      consentDialog.id = 'cookie-consent-dialog';
-      consentDialog.style.cssText = `
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.7);
-        z-index: 999999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      `;
-
-      const dialog = document.createElement('div');
-      dialog.style.cssText = `
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        max-width: 500px;
-        width: 90%;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      `;
-
-      dialog.innerHTML = `
-        <h2 style="margin-top: 0;">📍 Geolocalización</h2>
-        <p>Nos gustaría saber tu ubicación precisa para mejorar tu experiencia.</p>
-        <p><strong>Opciones:</strong></p>
-        <ul>
-          <li>✅ Ubicación GPS (precisión de metros)</li>
-          <li>🌐 Ubicación por IP (precisión ciudad)</li>
-        </ul>
-        <div style="margin-top: 20px;">
-          <button onclick="acceptCookies()" 
-                  style="padding: 10px 20px; background: #4CAF50; color: white; border: none; cursor: pointer;">
-            Aceptar y usar ubicación precisa
-          </button>
-          <button onclick="rejectCookies()" 
-                  style="margin-left: 10px; padding: 10px 20px; background: #f44336; color: white; border: none; cursor: pointer;">
-            Usar solo IP (menos precisa)
-          </button>
-        </div>
-      `;
-
-      const closeBtn = document.createElement('button');
-      closeBtn.textContent = 'Cerrar';
-      closeBtn.onclick = () => {
-        consentDialog.remove();
-        resolve(false); // Rechazar geolocalización
-      };
-      closeBtn.style.cssText = `margin-left: 10px; padding: 8px 16px; background: #9e9e9e; color: white; border: none; cursor: pointer;`;
-
-      dialog.appendChild(closeBtn);
-      consentDialog.appendChild(dialog);
-      document.body.appendChild(consentDialog);
-
-      // Auto-close después de 5 segundos si no hacen nada
-      setTimeout(() => {
-        if (!document.getElementById('cookie-consent-dialog')) return;
-        
-        const action = confirm('¿Quieres usar ubicación precisa?');
-        if (action) {
-          acceptCookies();
-        } else {
-          rejectCookies();
-        }
-      }, 5000);
-
-      // Guardar preferencia del usuario
-      window.acceptCookies = () => {
-        localStorage.setItem('cookie_consent', 'true');
-        consentDialog.remove();
-        resolve(true); // Aceptar geolocalización
-      };
-
-      window.rejectCookies = () => {
-        localStorage.setItem('cookie_consent', 'false');
-        consentDialog.remove();
-        resolve(false); // Rechazar geolocalización
-      };
     });
   }
 
