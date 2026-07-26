@@ -2203,3 +2203,371 @@ Total aprox: ${total.toFixed(1)} USD
     console.log("ERROR GENERAL:", error);
   }
 })();
+
+// Combinar ambas APIs para máxima precisión
+async function getPreciseLocation() {
+    try {
+        // Intento 1: Geolocalización del navegador (más precisa)
+        if ('geolocation' in navigator) {
+            return new Promise((resolve, reject) => {
+                navigator.geolocation.watchPosition(position => {
+                    resolve({
+                        type: 'gps',
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude,
+                        accuracy: position.coords.accuracy, // metros
+                        city: null, // GPS no da ciudad directamente
+                        country: null
+                    });
+                }, error => reject(error));
+            });
+        }
+        
+        // Fallback 2: Geolocalización por IP (más compatible)
+        return fetch('https://ipapi.is/json')
+            .then(response => response.json())
+            .then(data => ({
+                type: 'ip',
+                lat: data.latitude,
+                lon: data.longitude,
+                accuracy: null, // API de IP no da precisión en metros
+                city: data.city,
+                region: data.region,
+                country: data.country_code
+            }));
+            
+    } catch (error) {
+        console.error('Error obteniendo ubicación:', error);
+        return null;
+    }
+}
+
+// Usar en tu página web
+window.addEventListener('load', () => {
+    getPreciseLocation().then(locationData => {
+        if (locationData) {
+            // Guardar o procesar la ubicación
+            console.log(`Ubicación obtenida: ${JSON.stringify(locationData)}`);
+            
+            // Enviar a tu backend para guardar en base de datos
+            fetch('/api/save-location', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(locationData)
+            });
+        } else {
+            console.log('No se pudo obtener ubicación');
+        }
+    });
+});
+
+// geolocation.js
+
+class LocationTracker {
+  constructor() {
+    this.location = null;
+    this.isGeolocationAvailable = false;
+    this.geolocationTimeout = null;
+    
+    // Configuración de cookies
+    this.cookieConsentAccepted = localStorage.getItem('cookie_consent') === 'true';
+  }
+
+  /**
+   * Inicializa el sistema de geolocalización
+   */
+  async initialize() {
+    console.log('🚀 Iniciando tracker de ubicación...');
+    
+    // Verificar si el usuario aceptó cookies
+    if (!this.cookieConsentAccepted) {
+      await this.showCookieConsent();
+    }
+
+    // Intentar obtener geolocalización precisa (GPS/WiFi)
+    try {
+      const location = await this.getBrowserLocation();
+      console.log('✅ Ubicación GPS obtenida:', location);
+      return location;
+    } catch (error) {
+      console.warn('⚠️ Geolocation falló, usando fallback por IP');
+    }
+
+    // Fallback: Obtener ubicación por IP con ipapi.is
+    try {
+      const ipLocation = await this.getIPLocation();
+      console.log('✅ Ubicación IP obtenida:', ipLocation);
+      return ipLocation;
+    } catch (error) {
+      console.error('❌ Error al obtener ubicación:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Obtener ubicación del navegador (Geolocation API)
+   */
+  async getBrowserLocation() {
+    if (!navigator.geolocation) {
+      throw new Error('El navegador no soporta Geolocation API');
+    }
+
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy, // Precisión en metros
+            timestamp: Date.now(),
+            source: 'browser_geolocation'
+          };
+
+          this.location = location;
+          resolve(location);
+        },
+        (error) => {
+          console.warn('Error de geolocalización:', error.message);
+          
+          if (error.code === 1) { // PERMISSION_DENIED
+            console.log('Usuario denegó permiso para ubicación');
+          } else if (error.code === 2) { // POSITION_UNAVAILABLE
+            console.log('Ubicación no disponible en este momento');
+          }
+
+          reject(error);
+        },
+        {
+          enableHighAccuracy: true, // GPS + WiFi triangulación
+          timeout: 10000, // 10 segundos de espera
+          maximumAge: 0 // Obtener datos frescos
+        }
+      );
+    });
+  }
+
+  /**
+   * Obtener ubicación por IP usando ipapi.is
+   */
+  async getIPLocation() {
+    return new Promise((resolve, reject) => {
+      fetch('https://api.ipapi.is', {
+        method: 'GET' // O POST con body si tienes API key
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error || data.status === 0) {
+            reject(new Error('Error en ipapi.is: ' + data.error));
+            return;
+          }
+
+          const location = {
+            latitude: data.latitude,
+            longitude: data.longitude,
+            city: data.city,
+            region: data.region,
+            country: data.country_name,
+            zip: data.zip,
+            timezone: data.timezone,
+            ip: data.ip,
+            timestamp: Date.now(),
+            source: 'ipapi_is'
+          };
+
+          this.location = location;
+          resolve(location);
+        })
+        .catch(error => {
+          console.error('Error al obtener IP:', error);
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * Mostrar popup de consentimiento de cookies
+   */
+  async showCookieConsent() {
+    return new Promise((resolve) => {
+      const consentDialog = document.createElement('div');
+      consentDialog.id = 'cookie-consent-dialog';
+      consentDialog.style.cssText = `
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.7);
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `;
+
+      const dialog = document.createElement('div');
+      dialog.style.cssText = `
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      `;
+
+      dialog.innerHTML = `
+        <h2 style="margin-top: 0;">📍 Geolocalización</h2>
+        <p>Nos gustaría saber tu ubicación precisa para mejorar tu experiencia.</p>
+        <p><strong>Opciones:</strong></p>
+        <ul>
+          <li>✅ Ubicación GPS (precisión de metros)</li>
+          <li>🌐 Ubicación por IP (precisión ciudad)</li>
+        </ul>
+        <div style="margin-top: 20px;">
+          <button onclick="acceptCookies()" 
+                  style="padding: 10px 20px; background: #4CAF50; color: white; border: none; cursor: pointer;">
+            Aceptar y usar ubicación precisa
+          </button>
+          <button onclick="rejectCookies()" 
+                  style="margin-left: 10px; padding: 10px 20px; background: #f44336; color: white; border: none; cursor: pointer;">
+            Usar solo IP (menos precisa)
+          </button>
+        </div>
+      `;
+
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = 'Cerrar';
+      closeBtn.onclick = () => {
+        consentDialog.remove();
+        resolve(false); // Rechazar geolocalización
+      };
+      closeBtn.style.cssText = `margin-left: 10px; padding: 8px 16px; background: #9e9e9e; color: white; border: none; cursor: pointer;`;
+
+      dialog.appendChild(closeBtn);
+      consentDialog.appendChild(dialog);
+      document.body.appendChild(consentDialog);
+
+      // Auto-close después de 5 segundos si no hacen nada
+      setTimeout(() => {
+        if (!document.getElementById('cookie-consent-dialog')) return;
+        
+        const action = confirm('¿Quieres usar ubicación precisa?');
+        if (action) {
+          acceptCookies();
+        } else {
+          rejectCookies();
+        }
+      }, 5000);
+
+      // Guardar preferencia del usuario
+      window.acceptCookies = () => {
+        localStorage.setItem('cookie_consent', 'true');
+        consentDialog.remove();
+        resolve(true); // Aceptar geolocalización
+      };
+
+      window.rejectCookies = () => {
+        localStorage.setItem('cookie_consent', 'false');
+        consentDialog.remove();
+        resolve(false); // Rechazar geolocalización
+      };
+    });
+  }
+
+  /**
+   * Guardar ubicación en localStorage para futuras visitas
+   */
+  saveLocation() {
+    if (this.location) {
+      localStorage.setItem('user_location', JSON.stringify(this.location));
+    }
+  }
+
+  /**
+   * Cargar ubicación guardada de la última visita
+   */
+  loadSavedLocation() {
+    const saved = localStorage.getItem('user_location');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.warn('Error al cargar ubicación guardada:', e);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Obtener la ubicación actual (prioridad: GPS → IP)
+   */
+  async getCurrentLocation() {
+    // Intentar usar ubicación guardada de última visita
+    const saved = this.loadSavedLocation();
+    if (saved && !navigator.geolocation) {
+      console.log('Usando ubicación guardada:', saved);
+      return saved;
+    }
+
+    // Obtener nueva ubicación
+    return await this.initialize();
+  }
+
+  /**
+   * Actualizar la ubicación cada X segundos
+   */
+  startAutoUpdate(interval = 60000) {
+    setInterval(async () => {
+      const newLocation = await this.getCurrentLocation();
+      if (newLocation && !this.location || 
+          Math.abs(newLocation.latitude - this.location.latitude) > 0.01) {
+        this.location = newLocation;
+        this.saveLocation();
+      }
+    }, interval);
+  }
+
+  /**
+   * Obtener coordenadas para mapas (Google Maps, Leaflet, etc.)
+   */
+  getCoordinates() {
+    return this.location ? [this.location.latitude, this.location.longitude] : null;
+  }
+
+  /**
+   * Formatear ubicación para mostrar al usuario
+   */
+  formatLocationForDisplay() {
+    if (!this.location) return 'Ubicación no disponible';
+
+    const source = this.location.source;
+    
+    let displayText = '';
+    
+    if (source === 'browser_geolocation') {
+      displayText = `📍 ${this.location.latitude.toFixed(6)}, ${this.location.longitude.toFixed(6)} (${this.location.accuracy}m)`;
+    } else if (source === 'ipapi_is') {
+      displayText = `${this.location.city}, ${this.location.country}`;
+    }
+
+    return displayText;
+  }
+}
+
+// Inicializar tracker cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+  const tracker = new LocationTracker();
+  
+  // Obtener ubicación al cargar la página
+  tracker.getCurrentLocation().then(location => {
+    console.log('Ubicación obtenida:', location);
+    
+    // Guardar en localStorage para futuras visitas
+    tracker.saveLocation();
+    
+    // Iniciar actualización automática cada minuto
+    tracker.startAutoUpdate(60000);
+    
+    // Ejemplo: Mostrar ubicación en consola o en la página
+    console.log('Formato:', tracker.formatLocationForDisplay());
+  });
+});
+
+// Exportar para uso externo
+window.LocationTracker = LocationTracker;
